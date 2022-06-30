@@ -11,7 +11,6 @@ import {
   useMantineColorScheme,
   useMantineTheme,
 } from "@mantine/core";
-import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   Heart,
@@ -23,12 +22,14 @@ import {
   Star,
   Video,
 } from "tabler-icons-react";
+import { useAuth } from "../temp-context/AuthContext";
 import { useAuthModal } from "../temp-context/AuthModalContext";
 import { useLogoutModal } from "../temp-context/LogoutModalContext";
 import { useMobileDrawer } from "../temp-context/MobileDrawerContext";
 import { AuthenticationForm } from "./AuthenticationForm";
 import { MobileNav } from "./MobileNav";
 import { ThemeToggle } from "./ThemeToggleButton";
+import { successToast } from "./Toast";
 
 function HeaderComponent() {
   const theme = useMantineTheme();
@@ -36,7 +37,21 @@ function HeaderComponent() {
   const { sideNavOpen, setSideNavOpen } = useMobileDrawer();
   const { toggleColorScheme } = useMantineColorScheme();
   const { authModalOpened, setAuthModalOpned } = useAuthModal();
+  const {
+    isAuthenticated,
+    userData,
+    setToken,
+    setIsAuthenticated,
+    setUserData,
+  } = useAuth();
 
+  const logoutHandler = async () => {
+    setToken("");
+    setIsAuthenticated(false);
+    setUserData({});
+    successToast("Logout Success!");
+    setLogoutModalOpened(false);
+  };
 
   return (
     <Header height={70} p="md">
@@ -54,7 +69,7 @@ function HeaderComponent() {
           onClose={() => setLogoutModalOpened(false)}
         >
           <Text>Do you really want to logout from lightsout video?</Text>
-          <Button color="red" my={"md"} >
+          <Button color="red" my={"md"} onClick={logoutHandler}>
             Logout
           </Button>{" "}
         </Modal>
@@ -111,52 +126,51 @@ function HeaderComponent() {
           >
             <AuthenticationForm />
           </Modal>
-          {<Button onClick={() => setAuthModalOpned(true)} mx={"sm"}>
-            Login
-          </Button>}
-          {<Menu
-            sx={{ cursor: "pointer" }}
-            closeOnScroll
-            control={
-              <Avatar
-                src={"https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=250&q=80"}
-                alt="it's me"
-                radius={"xl"}
-                mx="md"
-                size={"md"}
-              ></Avatar>
-            }
-          >
-            <Menu.Item icon={<Heart size={14} color={theme.colors.red[6]} />}>
-              Liked posts
-            </Menu.Item>
-            <Menu.Item icon={<Star size={14} color={theme.colors.yellow[6]} />}>
-              Saved posts
-            </Menu.Item>
-            <Menu.Item
-              icon={<Message size={14} color={theme.colors.blue[6]} />}
+          {!isAuthenticated ? (
+            <Button onClick={() => setAuthModalOpned(true)} mx={"sm"}>
+              Login
+            </Button>
+          ) : (
+            <Menu
+              sx={{ cursor: "pointer" }}
+              closeOnScroll
+              control={
+                <Avatar alt={userData.name} radius={"xl"} mx="md" size={"md"} />
+              }
             >
-              Your comments
-            </Menu.Item>
-            <Divider />
-            <Menu.Label>Theme</Menu.Label>
-            <Menu.Item
-              icon={<Moon size={14} />}
-              onClick={() => toggleColorScheme()}
-            >
-              Appearence : {theme.colorScheme === "dark" ? "Dark" : "Light"}
-            </Menu.Item>
-            <Divider />
-            <Menu.Label>Account</Menu.Label>
-            <Menu.Item icon={<Settings size={14} />}>Profile</Menu.Item>
-            <Menu.Item
-              color={"red"}
-              icon={<Logout size={14} />}
-              onClick={() => setLogoutModalOpened(true)}
-            >
-              Logout
-            </Menu.Item>
-          </Menu>}
+              <Menu.Item icon={<Heart size={14} color={theme.colors.red[6]} />}>
+                Liked posts
+              </Menu.Item>
+              <Menu.Item
+                icon={<Star size={14} color={theme.colors.yellow[6]} />}
+              >
+                Saved posts
+              </Menu.Item>
+              <Menu.Item
+                icon={<Message size={14} color={theme.colors.blue[6]} />}
+              >
+                Your comments
+              </Menu.Item>
+              <Divider />
+              <Menu.Label>Theme</Menu.Label>
+              <Menu.Item
+                icon={<Moon size={14} />}
+                onClick={() => toggleColorScheme()}
+              >
+                Appearence : {theme.colorScheme === "dark" ? "Dark" : "Light"}
+              </Menu.Item>
+              <Divider />
+              <Menu.Label>Account</Menu.Label>
+              <Menu.Item icon={<Settings size={14} />}>Profile</Menu.Item>
+              <Menu.Item
+                color={"red"}
+                icon={<Logout size={14} />}
+                onClick={() => setLogoutModalOpened(true)}
+              >
+                Logout
+              </Menu.Item>
+            </Menu>
+          )}
         </div>
       </div>
     </Header>

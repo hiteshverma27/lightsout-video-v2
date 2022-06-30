@@ -16,6 +16,8 @@ import React, { useEffect, useState } from "react";
 import { GoogleIcon } from "../assets/GoogleIcon";
 import { useAuthModal } from "../temp-context/AuthModalContext";
 import axios from "axios"
+import { errorToast, successToast } from "./Toast";
+import { useAuth } from "../temp-context/AuthContext";
 
 export interface AuthenticationFormProps {
   noShadow?: boolean;
@@ -30,11 +32,13 @@ function AuthenticationForm({
   noSubmit,
   style,
 }: AuthenticationFormProps) {
-  const [formType, setFormType] = useState<"register" | "login">("register");
+  const [formType, setFormType] = useState<"register" | "login">("login");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>(null);
   const theme = useMantineTheme();
   const { authModalOpened, setAuthModalOpned } = useAuthModal();
+  const { setToken, setIsAuthenticated, setUserData, isAuthenticated } =
+    useAuth();
 
 
   const toggleFormType = () => {
@@ -72,17 +76,61 @@ function AuthenticationForm({
   const loginclickhandler = async (e: { (e: any): void; preventDefault?: any; }) => {
     setLoading(true);
     try {
-      const userData = await axios.post("/api/auth/signup", {
-        email: "hiteshverma222@gmail.com",
-        password: "hitesh123",
+      const userData = await axios.post("/api/auth/login", {
+        email: form.values.email,
+        password: form.values.password,
       });
-      console.log(userData);
+      setToken(userData.data.encodedToken);
+      setIsAuthenticated(true);
+      setUserData(userData.data.foundUser);
+      setIsAuthenticated(true);
+      setAuthModalOpned(false);
+      successToast("Signup Success! Welcome onboard!");
     } catch (error) {
-      console.log(error);
-      
+        errorToast(error);
     }
     setLoading(false);
   };
+
+  // const registerclickhandler = async (e: { (e: any): void; preventDefault?: any; }) => {
+  //   setLoading(true);
+  //   try {
+  //     const userData = await axios.post("/api/auth/signup", {
+  //       email: "hiteshverma222@gmail.com",
+  //       password: "hitesh123",
+  //     });
+  //     console.log(userData);
+  //   } catch (error) {
+  //     console.log(error);
+      
+  //   }
+  //   setLoading(false);
+  // };
+
+
+  const registerclickhandler = async () => {
+    setLoading(true);
+      try {
+        await axios.post("/api/auth/signup", {
+          email: form.values.email,
+          password: form.values.password,
+          firstName: form.values.firstName,
+          lastName: form.values.lastName,
+        });
+        const userData = await axios.post("/api/auth/login", {
+          email: form.values.email,
+          password: form.values.password,
+        });
+        setToken(userData.data.encodedToken);
+        setIsAuthenticated(true);
+        setUserData(userData.data.foundUser);
+        setIsAuthenticated(true);
+        setAuthModalOpned(false);
+        successToast("Signup Success! Welcome onboard!");
+      } catch (error) {
+          errorToast(error);
+      }
+    };
 
   const handleSubmit = () => {
     // setError(null);
@@ -95,7 +143,7 @@ function AuthenticationForm({
     //   );
     // }, 3000);
 
-    formType==="login"&&loginclickhandler(e)
+    formType==="login" ? loginclickhandler(e) : registerclickhandler();
   };
 
 
@@ -110,8 +158,7 @@ function AuthenticationForm({
           theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
         ...style,
       }}
-    ><Button fullWidth leftIcon={<GoogleIcon />} variant="default" color="gray">Continue with google</Button>
-       <Divider label="Or continue with email" labelPosition="center" my="lg" />
+    >
       <form onSubmit={form.onSubmit(handleSubmit)} >
         <LoadingOverlay visible={loading} />
         {formType === "register" && (

@@ -9,9 +9,11 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { Playlist } from "tabler-icons-react";
+import { useVideo } from "../temp-context/VideoContext";
 
 function PlaylistCard() {
   const theme = useMantineTheme();
+  const {playlist} = useVideo()
 
   return (
     <Grid

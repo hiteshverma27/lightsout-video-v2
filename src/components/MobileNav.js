@@ -159,7 +159,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
         <Button
           color={"red"}
           className={classes.link}
-          onClick={(event: { preventDefault: () => void }) => {
+          onClick={(event) => {
             event.preventDefault();
             setSideNavOpen(false);
             setLogoutModalOpened(true);

@@ -5,6 +5,9 @@ import { useParams } from "react-router-dom";
 import { Eye, History, PlaylistAdd, ThumbUp } from "tabler-icons-react";
 import { DesktopNav, Footer, HeaderComponent } from "../components";
 import { FooterData } from "../staticData/FooterData";
+import axios from "axios"
+import { errorToast } from "../components/Toast";
+import { useAuth } from "../temp-context/AuthContext";
 
 
 const useStyles = createStyles((theme) => ({
@@ -90,15 +93,36 @@ const useStyles = createStyles((theme) => ({
 function SingleVideo() {
   const theme = useMantineTheme();
   const [playlistModal, setPlaylistModal] = useState(false);
-  const [isloading, setisloading] = useState(true);
+  const [isloading, setisloading] = useState(false);
   const { classes } = useStyles();
   const { videoId } = useParams();
+  const [video, setVideo] = useState({});
+  const {token} = useAuth();
+
   useEffect(() => {
-    console.log(videoId);
-    setTimeout(() => {
+    window.scrollTo(0, 0);
+    (async () => {
+      setisloading(true);
+      try {
+        const {
+          data: { video },
+        } = await axios.get(`/api/video/${videoId}`);
+        setVideo(video);
+        await axios.post(
+          `/api/user/history`,
+          { video },
+          {
+            headers: { authorization: token },
+          }
+        );
+        
+      } catch (error) {
+        errorToast("Something went wrong while featching video!");
+      }
       setisloading(false);
-    }, 2000);
-  }, []);
+    })();
+    
+  }, [videoId]);
 
   return (
     <AppShell
@@ -120,7 +144,6 @@ function SingleVideo() {
     >
       <div style={{ position: "relative" }}>
         <LoadingOverlay visible={isloading} />
-        {/* ...other content */}
         <Container className={classes.container}>
           <Modal
             opened={playlistModal}
@@ -139,15 +162,15 @@ function SingleVideo() {
           </Modal>
           <iframe
             className={classes.ytPlayer}
-            src="https://www.youtube.com/embed/FE6CTvs_g9Y"
+            src={`https://www.youtube.com/embed/${video._id}`}
             title="YouTube video player"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             style={{ borderRadius: "1rem", height: "60vh" }}
           ></iframe>
-          <Text className={classes.title} lineClamp={1}>
-            Sukhoi Su-57 - Pushing the Limits
+          <Text className={classes.title} lineClamp={1} align="left">
+            {video.title}
           </Text>
           <div className={classes.actionButtons}>
             <Container
@@ -157,7 +180,7 @@ function SingleVideo() {
               pl={0}
             >
               <Avatar
-                src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=250&q=80"
+                src={video.avatar}
                 alt="it's me"
                 radius={"xl"}
                 mx={"sm"}
@@ -168,14 +191,14 @@ function SingleVideo() {
                 style={{ minWidth: "125px", maxWidth: "20rem" }}
                 my={"sm"}
               >
-                <Text weight={600}>Creator name</Text>
+                <Text weight={600}>{video.creator}</Text>
                 <Container className={classes.viewsAndDuration}>
                   <Text size="sm" style={{ display: "flex" }}>
                     <Eye size={18} />
-                    1M
+                    {video.views}
                   </Text>
                   <Text>
-                    <StopwatchIcon /> 8:09
+                    <StopwatchIcon />{video.duration}
                   </Text>
                 </Container>
               </Container>
@@ -198,15 +221,7 @@ function SingleVideo() {
             </Container>
           </div>
           <Text className={classes.description} m="md" lineClamp={2}>
-            Watch everything goining on in motorsport world at one place.
-            Weather it be the science behind things or the story of drivers and
-            teams. Watch everything goining on in motorsport world at one place.
-            Weather it be the science behind things or the story of drivers and
-            teams. Watch everything goining on in motorsport world at one place.
-            Weather it be the science behind things or the story of drivers and
-            teams. Watch everything goining on in motorsport world at one place.
-            Weather it be the science behind things or the story of drivers and
-            teams.
+            {video.description}
           </Text>
         </Container>
       </div>
