@@ -48,9 +48,7 @@ function Playlist() {
     const getPlaylist = async () => {
       setIsloading(true);
       try {
-        const res = await axios.get(`/api/user/playlists`, {
-          headers: { authorization: token },
-        });
+        const res = await axios.get(`/api/user/playlists`);
         setCurrentPlayistVideos(
           res.data.playlists.filter(
             (item: { _id: string }) => item._id === playlistId
@@ -98,9 +96,7 @@ function Playlist() {
             <Divider />
             <Grid
               style={{
-                alignItems: "flex-start",
                 overflowX: "hidden",
-                justifyContent: "center",
               }}
               mt="md"
               grow

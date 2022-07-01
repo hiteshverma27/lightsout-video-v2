@@ -40,9 +40,7 @@ function PlaylistListing() {
     const getPlaylists = async () => {
       setIsloading(true);
       try {
-        const res = await axios.get(`/api/user/playlists`, {
-          headers: { authorization: token },
-        });
+        const res = await axios.get(`/api/user/playlists`);
         setPlaylist(res.data.playlists);
       } catch (error) {
         errorToast("Something went wrong while adding video to history!");
@@ -79,9 +77,7 @@ function PlaylistListing() {
             <Grid
               justify="center"
               style={{
-                alignItems: "flex-start",
                 overflowX: "hidden",
-                justifyContent: "center",
               }}
               mt="md"
               grow

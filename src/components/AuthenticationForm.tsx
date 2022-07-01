@@ -175,8 +175,32 @@ function AuthenticationForm({
       setUserData(userData.data.foundUser);
       setIsAuthenticated(true);
       setAuthModalOpned(false);
-      axios.defaults.headers.common["authorization"] = userData.data.encodedToken;
+      axios.defaults.headers.common["authorization"] =
+        userData.data.encodedToken;
       successToast("Signup Success! Welcome onboard!");
+    } catch (error) {
+      errorToast(error);
+    }
+    setLoading(false);
+  };
+  const guestLoginHandler = async (e: {
+    (e: any): void;
+    preventDefault?: any;
+  }) => {
+    setLoading(true);
+    try {
+      const userData = await axios.post("/api/auth/login", {
+        email: "hiteshverma@gmail.com",
+        password: "hitesh123",
+      });
+      setToken(userData.data.encodedToken);
+      setIsAuthenticated(true);
+      setUserData(userData.data.foundUser);
+      setIsAuthenticated(true);
+      setAuthModalOpned(false);
+      axios.defaults.headers.common["authorization"] =
+        userData.data.encodedToken;
+      successToast(`Welcome back ${userData.data.foundUser.firstName}!`);
     } catch (error) {
       errorToast(error);
     }
@@ -216,7 +240,8 @@ function AuthenticationForm({
       setUserData(userData.data.foundUser);
       setIsAuthenticated(true);
       setAuthModalOpned(false);
-      axios.defaults.headers.common["authorization"] = userData.data.encodedToken;
+      axios.defaults.headers.common["authorization"] =
+        userData.data.encodedToken;
       successToast("Signup Success! Welcome onboard!");
     } catch (error) {
       errorToast(error);
@@ -319,6 +344,9 @@ function AuthenticationForm({
 
             <Button color="blue" type="submit">
               {formType === "register" ? "Register" : "Login"}
+            </Button>
+            <Button color="blue" onClick={() => guestLoginHandler(e)}>
+              Guest Login
             </Button>
           </Group>
         )}

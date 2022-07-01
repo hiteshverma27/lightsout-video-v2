@@ -106,9 +106,7 @@ function VideoCard() {
     <Grid
       justify="center"
       style={{
-        alignItems: "flex-start",
         overflowX: "hidden",
-        justifyContent: "center",
       }}
       mt="md"
       grow

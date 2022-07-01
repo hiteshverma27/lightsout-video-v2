@@ -147,10 +147,7 @@ function SingleVideo() {
     const deleteFromWatchLater = async (video) => {
       try {
         const watchLater = await axios.delete(
-          `/api/user/watchlater/${video._id}`,
-          {
-            headers: { authorization: token },
-          }
+          `/api/user/watchlater/${video._id}`
         );
         setWatchLater(watchLater.data.watchlater);
         successToast("Video deleted from watch later!");
@@ -166,10 +163,7 @@ function SingleVideo() {
       try {
         const watchLaterVideo = await axios.post(
           `/api/user/watchlater`,
-          { video },
-          {
-            headers: { authorization: token },
-          }
+          { video }
         );
         successToast("Video added to watch later!");
         setWatchLater(watchLaterVideo.data.watchlater);
@@ -207,9 +201,7 @@ function SingleVideo() {
 
     const removeFromLikedVideos = async (video) => {
       try {
-        const likedVideos = await axios.delete(`/api/user/likes/${video._id}`, {
-          headers: { authorization: token },
-        });
+        const likedVideos = await axios.delete(`/api/user/likes/${video._id}`);
         successToast("Video removed from liked videos!");
         setLikedVideos(likedVideos.data.likes);
       } catch (error) {
@@ -230,10 +222,7 @@ function SingleVideo() {
     try {
       await axios.post(
         `/api/user/history`,
-        { video },
-        {
-          headers: { authorization: token },
-        }
+        { video }
       );
     } catch (error) {
       error.response.status === 500 &&
@@ -276,9 +265,6 @@ function SingleVideo() {
                     videos: (prev) => [...prev, video],
                   },
                 ],
-              },
-              {
-                headers: { authorization: token },
               }
             );
             setPlaylist(res.data.playlists);
@@ -294,9 +280,7 @@ function SingleVideo() {
 
   const getPlaylists = async () => {
     try {
-      const res = await axios.get(`/api/user/playlists`, {
-        headers: { authorization: token },
-      });
+      const res = await axios.get(`/api/user/playlists`);
       setPlaylist(res.data.playlists);
     } catch (error) {
       error.response.status === 500 && errorToast("Something went wrong!");
@@ -324,9 +308,7 @@ function SingleVideo() {
   };
   const removeVideoFromPlaylist = async (video, item) => {
     try {
-      await axios.delete(`/api/user/playlists/${item._id}/${video._id}`, {
-        headers: { authorization: token },
-      });
+      await axios.delete(`/api/user/playlists/${item._id}/${video._id}`);
 
       successToast(`Video removed from ${item[0].name}`);
     } catch (error) {

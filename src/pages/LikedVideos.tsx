@@ -47,9 +47,7 @@ function LikedVideos() {
     const getLikedVideos = async () => {
       setIsloading(true);
       try {
-        const res = await axios.get(`/api/user/likes`, {
-          headers: { authorization: token },
-        });
+        const res = await axios.get(`/api/user/likes`);
         setLikedVideos(res.data.likes);
       } catch (error) {
         errorToast("Something went wrong while adding video to history!");
@@ -88,9 +86,7 @@ function LikedVideos() {
             <Divider />
             <Grid
               style={{
-                alignItems: "flex-start",
                 overflowX: "hidden",
-                justifyContent: "center",
               }}
               mt="md"
               grow

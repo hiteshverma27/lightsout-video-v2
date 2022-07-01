@@ -47,9 +47,7 @@ function WatchLater() {
     const getWatchLater = async () => {
       setIsloading(true);
       try {
-        const res = await axios.get(`/api/user/watchlater`, {
-          headers: { authorization: token },
-        });
+        const res = await axios.get(`/api/user/watchlater`);
         setWatchLater(res.data.watchlater);
       } catch (error) {
         errorToast("Something went wrong while adding video to history!");
@@ -88,15 +86,13 @@ function WatchLater() {
             <Divider />
             <Grid
               style={{
-                alignItems: "flex-start",
                 overflowX: "hidden",
-                justifyContent: "center",
               }}
               mt="md"
               grow
             >
               {watchLater.length === 0 ? (
-                <Title>
+                <Title align="center">
                   No videos here yet{" "}
                   <Button component={Link} to={"/explore"}>
                     Explore Videos
@@ -142,6 +138,7 @@ function WatchLater() {
                       sm={4}
                       xs={4}
                       key={item._id}
+                      
                     >
                       <Card
                         shadow="sm"

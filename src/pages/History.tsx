@@ -88,9 +88,7 @@ function History() {
             <Divider />
             <Grid
               style={{
-                alignItems: "flex-start",
                 overflowX: "hidden",
-                justifyContent: "center",
               }}
               mt="md"
               grow
