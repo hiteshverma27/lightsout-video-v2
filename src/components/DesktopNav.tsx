@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Logout } from "tabler-icons-react";
 import { NavbarData } from "../staticData/NavbarData";
-import { useLogoutModal } from "../temp-context/LogoutModalContext";
+import { useLogoutModal } from "../contexts/LogoutModalContext";
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef("icon");

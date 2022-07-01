@@ -32,11 +32,11 @@ import { useAuth } from "../contexts/AuthContext";
 import { useAuthModal } from "../contexts/AuthModalContext";
 import { useVideo } from "../contexts/VideoContext";
 
-function History() {
+function LikedVideos() {
   const [isloading, setIsloading] = useState(true);
   const { isAuthenticated, token } = useAuth();
   const { setAuthModalOpned } = useAuthModal();
-  const { history, setHistory } = useVideo();
+  const { setLikedVideos, likedVideos } = useVideo();
   const theme = useMantineTheme();
   const navigate = useNavigate();
   useEffect(() => {
@@ -44,20 +44,20 @@ function History() {
     // eslint-disable-next-line
   }, []);
   useEffect(() => {
-    const getHistory = async () => {
+    const getLikedVideos = async () => {
       setIsloading(true);
       try {
-        const res = await axios.get(`/api/user/history`, {
+        const res = await axios.get(`/api/user/likes`, {
           headers: { authorization: token },
         });
-        setHistory(res.data.history);
+        setLikedVideos(res.data.likes);
       } catch (error) {
         errorToast("Something went wrong while adding video to history!");
       }
       setIsloading(false);
     };
-    isAuthenticated && getHistory();
-  }, [isAuthenticated, token, setHistory]);
+    isAuthenticated && getLikedVideos();
+  }, [isAuthenticated, token, setLikedVideos]);
 
   return (
     <AppShell
@@ -83,7 +83,7 @@ function History() {
           <LoadingOverlay visible={isloading} />
           <div>
             <Text align="center" size="xl" weight={"bold"} my="md">
-              History
+              Liked Videos
             </Text>
             <Divider />
             <Grid
@@ -95,7 +95,7 @@ function History() {
               mt="md"
               grow
             >
-              {history.length === 0 ? (
+              {likedVideos.length === 0 ? (
                 <Title>
                   No videos here yet{" "}
                   <Button component={Link} to={"/explore"}>
@@ -103,7 +103,7 @@ function History() {
                   </Button>
                 </Title>
               ) : (
-                history.map(
+                likedVideos.map(
                   (item: {
                     _id: Key;
                     thumbnail: string;
@@ -214,4 +214,4 @@ function History() {
   );
 }
 
-export { History };
+export { LikedVideos };

@@ -11,8 +11,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Logout, Video } from "tabler-icons-react";
 import { NavbarData } from "../staticData/NavbarData";
-import { useLogoutModal } from "../temp-context/LogoutModalContext";
-import { useMobileDrawer } from "../temp-context/MobileDrawerContext";
+import { useLogoutModal } from "../contexts/LogoutModalContext";
+import { useMobileDrawer } from "../contexts/MobileDrawerContext";
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef("icon");

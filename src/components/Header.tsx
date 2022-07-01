@@ -11,21 +11,21 @@ import {
   useMantineColorScheme,
   useMantineTheme,
 } from "@mantine/core";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
-  Heart,
+  History,
   Logout,
   Menu2,
-  Message,
   Moon,
+  Playlist,
   Settings,
-  Star,
+  ThumbUp,
   Video,
 } from "tabler-icons-react";
-import { useAuth } from "../temp-context/AuthContext";
-import { useAuthModal } from "../temp-context/AuthModalContext";
-import { useLogoutModal } from "../temp-context/LogoutModalContext";
-import { useMobileDrawer } from "../temp-context/MobileDrawerContext";
+import { useAuth } from "../contexts/AuthContext";
+import { useAuthModal } from "../contexts/AuthModalContext";
+import { useLogoutModal } from "../contexts/LogoutModalContext";
+import { useMobileDrawer } from "../contexts/MobileDrawerContext";
 import { AuthenticationForm } from "./AuthenticationForm";
 import { MobileNav } from "./MobileNav";
 import { ThemeToggle } from "./ThemeToggleButton";
@@ -37,6 +37,7 @@ function HeaderComponent() {
   const { sideNavOpen, setSideNavOpen } = useMobileDrawer();
   const { toggleColorScheme } = useMantineColorScheme();
   const { authModalOpened, setAuthModalOpned } = useAuthModal();
+  const navigate = useNavigate();
   const {
     isAuthenticated,
     userData,
@@ -138,18 +139,23 @@ function HeaderComponent() {
                 <Avatar alt={userData.name} radius={"xl"} mx="md" size={"md"} />
               }
             >
-              <Menu.Item icon={<Heart size={14} color={theme.colors.red[6]} />}>
-                Liked posts
+              <Menu.Item
+                icon={<ThumbUp size={14} color={theme.colors.red[6]} />}
+                onClick={() => navigate("/liked-videos")}
+              >
+                Liked Videos
               </Menu.Item>
               <Menu.Item
-                icon={<Star size={14} color={theme.colors.yellow[6]} />}
+                icon={<Playlist size={14} color={theme.colors.yellow[6]} />}
+                onClick={() => navigate("/playlists")}
               >
-                Saved posts
+                Playlists
               </Menu.Item>
               <Menu.Item
-                icon={<Message size={14} color={theme.colors.blue[6]} />}
+                icon={<History size={14} color={theme.colors.blue[6]} />}
+                onClick={() => navigate("/history")}
               >
-                Your comments
+                History
               </Menu.Item>
               <Divider />
               <Menu.Label>Theme</Menu.Label>

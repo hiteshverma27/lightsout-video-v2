@@ -25,6 +25,17 @@ const errorToast = (msg) => {
       progress: undefined,
     });
   };
+const warningToast = (msg) => {
+    toast.warning(msg, {
+      position: "bottom-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+    });
+  };
 
 
-export { successToast, errorToast };
+export { successToast, errorToast, warningToast };

@@ -10,18 +10,22 @@ export const categories = [
     _id: uuid(),
     categoryName: "F101",
     description:
-      "Computer programming is the process of designing and building an executable computer program to accomplish a specific computing",
+      "Watch the basics of F1 and learn about the history of the sport.",
+    image: "https://i.ytimg.com/vi/QL_ZAxF0_9o/maxresdefault.jpg",
+    
   },
   {
     _id: uuid(),
     categoryName: "F1 Explained",
     description:
-      "Front-end web development, also known as client-side development is the practice of producing HTML, CSS and JavaScript for a website or Web Application",
-  },
-  {
-    _id: uuid(),
-    categoryName: "It's all over F1",
-    description:
-      "Backend Development is also known as server-side development. It is everything that the users don't see and contains behind-the-scenes activities that occur when performing any action on a website.",
+      "Learn about the history of the sport and the rules of the sport.",
+      image: "https://i.ytimg.com/vi/tZpEHsId2g8/maxresdefault.jpg",
+    },
+    {
+      _id: uuid(),
+      categoryName: "It's all over F1",
+      description:
+      "Learn about journeys of the drivers and the careers in the sport.",
+      image: "https://i.ytimg.com/vi/N3hgko9AoVU/maxresdefault.jpg",
   },
 ];

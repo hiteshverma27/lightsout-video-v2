@@ -1,24 +1,21 @@
 import {
-  ActionIcon,
   AppShell,
   Chip,
   Chips,
   Divider,
-  MediaQuery,
   Paper,
-  TextInput,
   useMantineTheme,
 } from "@mantine/core";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { ArrowLeft, ArrowRight, Search } from "tabler-icons-react";
+import { categories } from "../backend/db/categories";
 import { DesktopNav, HeaderComponent, Loading, VideoCard } from "../components";
 import { errorToast } from "../components/Toast";
-import { useVideo } from "../temp-context/VideoContext";
+import { useVideo } from "../contexts/VideoContext";
 
 function VideoListing() {
   const [isloading, setIsloading] = useState(true);
-  const { setVideos, videos } = useVideo();
+  const { setVideos, categoriesToFilter, setCategoriesToFilter } = useVideo();
   // useEffect(() => {
   //   setTimeout(() => {
   //     setIsloading(false);
@@ -37,8 +34,10 @@ function VideoListing() {
       }
       setIsloading(false);
     })();
+    // eslint-disable-next-line
   }, []);
   const theme = useMantineTheme();
+  console.log(categoriesToFilter);
   return (
     <AppShell
       styles={{
@@ -60,7 +59,7 @@ function VideoListing() {
         </Paper>
       ) : (
         <div>
-          <MediaQuery largerThan={"sm"} styles={{ display: "none" }}>
+          {/* <MediaQuery largerThan={"sm"} styles={{ display: "none" }}>
             <div>
               <TextInput
                 icon={<Search size={18} />}
@@ -85,12 +84,19 @@ function VideoListing() {
               />
               <Divider mt={"md"} />
             </div>
-          </MediaQuery>
-
-          <Chips m={"lg"} spacing="md">
-            <Chip value="react">React</Chip>
-            <Chip value="ng">Angular</Chip>
-            <Chip value="svelte">Svelte</Chip>
+          </MediaQuery> */}
+          <Chips
+            py={"sm"}
+            spacing="md"
+            onChange={setCategoriesToFilter}
+            style={{ flexWrap: "nowrap", overflowY: "scroll", overflow:"auto" }}
+          >
+            <Chip value={""}>All</Chip>
+            {categories.map(({ categoryName }) => (
+              <Chip key={categoryName} value={categoryName}>
+                {categoryName}
+              </Chip>
+            ))}
           </Chips>
           <Divider />
           <VideoCard />

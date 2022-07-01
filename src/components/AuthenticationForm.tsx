@@ -1,24 +1,113 @@
 import {
   Anchor,
+  Box,
   Button,
-  Divider,
+  Center,
   Group,
   LoadingOverlay,
   Paper,
   PasswordInput,
+  Progress,
   Text,
   TextInput,
   useMantineTheme,
 } from "@mantine/core";
-import { useForm } from "@mantine/hooks";
+import { useForm, useInputState } from "@mantine/hooks";
 import { EnvelopeClosedIcon, LockClosedIcon } from "@modulz/radix-icons";
-import React, { useEffect, useState } from "react";
-import { GoogleIcon } from "../assets/GoogleIcon";
-import { useAuthModal } from "../temp-context/AuthModalContext";
-import axios from "axios"
+import axios from "axios";
+import React, { useState } from "react";
+import { Check, X } from "tabler-icons-react";
+import { useAuth } from "../contexts/AuthContext";
+import { useAuthModal } from "../contexts/AuthModalContext";
 import { errorToast, successToast } from "./Toast";
-import { useAuth } from "../temp-context/AuthContext";
 
+//password input
+function PasswordRequirement({
+  meets,
+  label,
+}: {
+  meets: boolean;
+  label: string;
+}) {
+  return (
+    <Text color={meets ? "teal" : "red"} mt={5} size="sm">
+      <Center inline>
+        {meets ? <Check size={14} /> : <X size={14} />}
+        <Box ml={7}>{label}</Box>
+      </Center>
+    </Text>
+  );
+}
+
+const requirements = [
+  { re: /[0-9]/, label: "Includes number" },
+  { re: /[a-z]/, label: "Includes lowercase letter" },
+  { re: /[A-Z]/, label: "Includes uppercase letter" },
+  { re: /[$&+,:;=?@#|'<>.^*()%!-]/, label: "Includes special symbol" },
+];
+
+function getStrength(password: string) {
+  let multiplier = password.length > 5 ? 0 : 1;
+
+  requirements.forEach((requirement) => {
+    if (!requirement.re.test(password)) {
+      multiplier += 1;
+    }
+  });
+
+  return Math.max(100 - (100 / (requirements.length + 1)) * multiplier, 0);
+}
+
+export function PasswordStrength() {
+  const [value, setValue] = useInputState("");
+  const strength = getStrength(value);
+  const checks = requirements.map((requirement, index) => (
+    <PasswordRequirement
+      key={index}
+      label={requirement.label}
+      meets={requirement.re.test(value)}
+    />
+  ));
+  const bars = Array(4)
+    .fill(0)
+    .map((_, index) => (
+      <Progress
+        styles={{ bar: { transitionDuration: "0ms" } }}
+        value={
+          value.length > 0 && index === 0
+            ? 100
+            : strength >= ((index + 1) / 4) * 100
+            ? 100
+            : 0
+        }
+        color={strength > 80 ? "teal" : strength > 50 ? "yellow" : "red"}
+        key={index}
+        size={4}
+      />
+    ));
+
+  return (
+    <div>
+      <PasswordInput
+        value={value}
+        onChange={setValue}
+        placeholder="Your password"
+        label="Password"
+        required
+      />
+
+      <Group spacing={5} grow mt="xs" mb="md">
+        {bars}
+      </Group>
+
+      <PasswordRequirement
+        label="Has at least 6 characters"
+        meets={value.length > 5}
+      />
+      {checks}
+    </div>
+  );
+}
 export interface AuthenticationFormProps {
   noShadow?: boolean;
   noPadding?: boolean;
@@ -36,10 +125,8 @@ function AuthenticationForm({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>(null);
   const theme = useMantineTheme();
-  const { authModalOpened, setAuthModalOpned } = useAuthModal();
-  const { setToken, setIsAuthenticated, setUserData, isAuthenticated } =
-    useAuth();
-
+  const { setAuthModalOpned } = useAuthModal();
+  const { setToken, setIsAuthenticated, setUserData } = useAuth();
 
   const toggleFormType = () => {
     setFormType((current) => (current === "register" ? "login" : "register"));
@@ -60,7 +147,7 @@ function AuthenticationForm({
       firstName: (value) => formType === "login" || value.trim().length >= 2,
       lastName: (value) => formType === "login" || value.trim().length >= 2,
       email: (value) => /^\S+@\S+$/.test(value),
-      // password: (value) => /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/.test(value),
+      password: (value) => /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/.test(value),
       confirmPassword: (val, values) =>
         formType === "login" || val === values.password,
     },
@@ -73,7 +160,10 @@ function AuthenticationForm({
     },
   });
 
-  const loginclickhandler = async (e: { (e: any): void; preventDefault?: any; }) => {
+  const loginclickhandler = async (e: {
+    (e: any): void;
+    preventDefault?: any;
+  }) => {
     setLoading(true);
     try {
       const userData = await axios.post("/api/auth/login", {
@@ -85,9 +175,10 @@ function AuthenticationForm({
       setUserData(userData.data.foundUser);
       setIsAuthenticated(true);
       setAuthModalOpned(false);
+      axios.defaults.headers.common["authorization"] = userData.data.encodedToken;
       successToast("Signup Success! Welcome onboard!");
     } catch (error) {
-        errorToast(error);
+      errorToast(error);
     }
     setLoading(false);
   };
@@ -102,51 +193,40 @@ function AuthenticationForm({
   //     console.log(userData);
   //   } catch (error) {
   //     console.log(error);
-      
+
   //   }
   //   setLoading(false);
   // };
 
-
   const registerclickhandler = async () => {
     setLoading(true);
-      try {
-        await axios.post("/api/auth/signup", {
-          email: form.values.email,
-          password: form.values.password,
-          firstName: form.values.firstName,
-          lastName: form.values.lastName,
-        });
-        const userData = await axios.post("/api/auth/login", {
-          email: form.values.email,
-          password: form.values.password,
-        });
-        setToken(userData.data.encodedToken);
-        setIsAuthenticated(true);
-        setUserData(userData.data.foundUser);
-        setIsAuthenticated(true);
-        setAuthModalOpned(false);
-        successToast("Signup Success! Welcome onboard!");
-      } catch (error) {
-          errorToast(error);
-      }
-    };
-
-  const handleSubmit = () => {
-    // setError(null);
-    // setTimeout(() => {
-    //   setLoading(false);
-    //   setError(
-    //     formType === 'register'
-    //       ? 'User with this email already exists'
-    //       : 'User with this email does not exist'
-    //   );
-    // }, 3000);
-
-    formType==="login" ? loginclickhandler(e) : registerclickhandler();
+    try {
+      await axios.post("/api/auth/signup", {
+        email: form.values.email,
+        password: form.values.password,
+        firstName: form.values.firstName,
+        lastName: form.values.lastName,
+      });
+      const userData = await axios.post("/api/auth/login", {
+        email: form.values.email,
+        password: form.values.password,
+      });
+      setToken(userData.data.encodedToken);
+      setIsAuthenticated(true);
+      setUserData(userData.data.foundUser);
+      setIsAuthenticated(true);
+      setAuthModalOpned(false);
+      axios.defaults.headers.common["authorization"] = userData.data.encodedToken;
+      successToast("Signup Success! Welcome onboard!");
+    } catch (error) {
+      errorToast(error);
+    }
+    setLoading(false);
   };
 
-
+  const handleSubmit = () => {
+    formType === "login" ? loginclickhandler(e) : registerclickhandler();
+  };
 
   return (
     <Paper
@@ -159,7 +239,7 @@ function AuthenticationForm({
         ...style,
       }}
     >
-      <form onSubmit={form.onSubmit(handleSubmit)} >
+      <form onSubmit={form.onSubmit(handleSubmit)}>
         <LoadingOverlay visible={loading} />
         {formType === "register" && (
           <Group grow>
@@ -248,7 +328,6 @@ function AuthenticationForm({
 }
 
 export { AuthenticationForm };
-  function e(e: any) {
-    throw new Error("Function not implemented.");
-  }
-
+function e(e: any) {
+  throw new Error("Function not implemented.");
+}

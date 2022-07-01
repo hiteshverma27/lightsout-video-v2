@@ -14,6 +14,7 @@ import {
 
 const useStyles = createStyles((theme) => ({
   footer: {
+    width: "100%",
     marginTop: 20,
     paddingTop: theme.spacing.xl * 2,
     paddingBottom: theme.spacing.xl * 2,
@@ -121,7 +122,7 @@ interface FooterLinksProps {
   }[];
 }
 
- function Footer({ data }: FooterLinksProps) {
+function Footer({ data }: FooterLinksProps) {
   const { classes } = useStyles();
   const groups = data.map((group) => {
     const links = group.links.map((link, index) => (

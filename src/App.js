@@ -8,16 +8,19 @@ import {
   History,
   Landingpage,
   NotFound,
+  Playlist,
   PlaylistListing,
   SingleVideo,
   VideoListing,
 } from "./pages";
-import { AuthProvider } from "./temp-context/AuthContext";
-import { AuthModalProvider } from "./temp-context/AuthModalContext";
-import { LogoutModalProvider } from "./temp-context/LogoutModalContext";
-import { MobileDrawerProvider } from "./temp-context/MobileDrawerContext";
-import { VideoProvider } from "./temp-context/VideoContext";
+import { AuthProvider } from "./contexts/AuthContext";
+import { AuthModalProvider } from "./contexts/AuthModalContext";
+import { LogoutModalProvider } from "./contexts/LogoutModalContext";
+import { MobileDrawerProvider } from "./contexts/MobileDrawerContext";
+import { VideoProvider } from "./contexts/VideoContext";
 import { ToastContainer } from 'react-toastify';
+import { WatchLater } from "./pages/WatchLater";
+import { LikedVideos } from "./pages/LikedVideos";
 
 function App() {
   return (
@@ -36,8 +39,11 @@ function App() {
                       <Route path="/explore" element={<VideoListing />} />
                       <Route path="/history" element={<History />} />
                       <Route path="/playlists" element={<PlaylistListing />} />
+                      <Route path="/watch-later" element={<WatchLater />} />
+                      <Route path="/liked-videos" element={<LikedVideos />} />
                       <Route path="*" element={<NotFound />} />
                       <Route path="/video/:videoId" element={<SingleVideo />} />
+                      <Route path="/playlist/:playlistId" element={<Playlist />} />
                     </Routes>
                   </Paper>
                 </LogoutModalProvider>

@@ -1,6 +1,4 @@
-import { createContext, useContext, useState, useEffect } from "react";
-import axios from "axios";
-import { errorToast } from "../components/Toast";
+import { createContext, useContext, useState } from "react";
 
 const VideoContext = createContext();
 
@@ -12,7 +10,7 @@ const VideoProvider = ({ children }) => {
   const [history, setHistory] = useState([]);
   const [playlist, setPlaylist] = useState([]);
   const [playlistId, setPlaylistId] = useState("");
-  const [categoriesToFilter, setCategoriesToFilter] = useState([]);
+  const [categoriesToFilter, setCategoriesToFilter] = useState("");
 
   // useEffect(() => {
   //   (async () => {

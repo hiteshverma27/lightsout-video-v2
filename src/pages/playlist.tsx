@@ -23,41 +23,51 @@ import {
   useEffect,
   useState,
 } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { CardMenu } from "../components";
 import { DesktopNav } from "../components/DesktopNav";
 import { HeaderComponent } from "../components/Header";
 import { errorToast } from "../components/Toast";
 import { useAuth } from "../contexts/AuthContext";
 import { useAuthModal } from "../contexts/AuthModalContext";
-import { useVideo } from "../contexts/VideoContext";
 
-function History() {
+function Playlist() {
   const [isloading, setIsloading] = useState(true);
   const { isAuthenticated, token } = useAuth();
   const { setAuthModalOpned } = useAuthModal();
-  const { history, setHistory } = useVideo();
   const theme = useMantineTheme();
   const navigate = useNavigate();
+  const [currentPlaylistVideos, setCurrentPlayistVideos] = useState([]);
+  const [currentPlaylistName, setCurrentPlayistName] = useState("");
+  const { playlistId } = useParams();
   useEffect(() => {
     !isAuthenticated && setAuthModalOpned(true);
     // eslint-disable-next-line
   }, []);
   useEffect(() => {
-    const getHistory = async () => {
+    const getPlaylist = async () => {
       setIsloading(true);
       try {
-        const res = await axios.get(`/api/user/history`, {
+        const res = await axios.get(`/api/user/playlists`, {
           headers: { authorization: token },
         });
-        setHistory(res.data.history);
+        setCurrentPlayistVideos(
+          res.data.playlists.filter(
+            (item: { _id: string }) => item._id === playlistId
+          )[0].videos
+        );
+        setCurrentPlayistName(
+          res.data.playlists.filter(
+            (item: { _id: string }) => item._id === playlistId
+          )[0][0].name
+        );
       } catch (error) {
-        errorToast("Something went wrong while adding video to history!");
+        errorToast("Something went wrong while fetching videos for playlist!");
       }
       setIsloading(false);
     };
-    isAuthenticated && getHistory();
-  }, [isAuthenticated, token, setHistory]);
+    isAuthenticated && getPlaylist();
+  }, [isAuthenticated, token, playlistId]);
 
   return (
     <AppShell
@@ -83,7 +93,7 @@ function History() {
           <LoadingOverlay visible={isloading} />
           <div>
             <Text align="center" size="xl" weight={"bold"} my="md">
-              History
+              {currentPlaylistName}
             </Text>
             <Divider />
             <Grid
@@ -95,7 +105,7 @@ function History() {
               mt="md"
               grow
             >
-              {history.length === 0 ? (
+              {currentPlaylistVideos.length === 0 ? (
                 <Title>
                   No videos here yet{" "}
                   <Button component={Link} to={"/explore"}>
@@ -103,7 +113,7 @@ function History() {
                   </Button>
                 </Title>
               ) : (
-                history.map(
+                currentPlaylistVideos.map(
                   (item: {
                     _id: Key;
                     thumbnail: string;
@@ -214,4 +224,4 @@ function History() {
   );
 }
 
-export { History };
+export { Playlist };
