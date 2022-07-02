@@ -25,8 +25,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { useAuthModal } from "../contexts/AuthModalContext";
 import { useVideo } from "../contexts/VideoContext";
 import { createPlaylistHandler } from "../services";
-import { DesktopNavSkeleton } from "../skeletonComponents/DesktopNavSkeleton";
-import { HeaderSkeleton } from "../skeletonComponents/HeaderSkeleton";
+import { DesktopNavSkeleton, HeaderSkeleton } from "../skeletonComponents";
 import { FooterData } from "../staticData/FooterData";
 
 const useStyles = createStyles((theme) => ({
@@ -146,7 +145,7 @@ function SingleVideo() {
       } catch (error) {
         errorToast("Something went wrong while featching video!");
       }
-      // setisloading(false);
+      setisloading(false);
     })();
   }, [setSingleVideo, videoId]);
 

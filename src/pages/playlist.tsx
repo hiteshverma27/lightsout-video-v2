@@ -8,6 +8,7 @@ import {
   Group,
   Image,
   LoadingOverlay,
+  Skeleton,
   Text,
   Title,
   useMantineTheme,
@@ -31,6 +32,7 @@ import { HeaderComponent } from "../components/Header";
 import { errorToast } from "../components/Toast";
 import { useAuth } from "../contexts/AuthContext";
 import { useAuthModal } from "../contexts/AuthModalContext";
+import { DesktopNavSkeleton, HeaderSkeleton, VideoCardSkeleton } from "../skeletonComponents";
 
 function Playlist() {
   const [isloading, setIsloading] = useState(true);
@@ -83,16 +85,30 @@ function Playlist() {
       }}
       navbarOffsetBreakpoint="xs"
       fixed
-      navbar={<DesktopNav />}
-      header={<HeaderComponent />}
+      navbar={isloading ? <DesktopNavSkeleton /> : <DesktopNav />}
+      header={isloading ? <HeaderSkeleton /> : <HeaderComponent />}
     >
       {!isAuthenticated ? (
         <Title align="center">You need to login to access this page</Title>
+      ) : isloading ? (
+        <div>
+          <div
+            style={{
+              marginBottom: "1rem",
+              marginLeft: "1rem",
+              display: "flex",
+            }}
+          >
+            <Skeleton width={50} height={30} radius="lg" mx={"xs"} />
+            <Skeleton width={70} height={30} radius="lg" mx={"xs"} />
+            <Skeleton width={110} height={30} radius="lg" mx={"xs"} />
+            <Skeleton width={90} height={30} radius="lg" mx={"xs"} />
+          </div>
+
+          <Divider />
+          <VideoCardSkeleton />
+        </div>
       ) : (
-        <div
-          style={{ position: "relative", height: "100%", overflowX: "hidden" }}
-        >
-          <LoadingOverlay visible={isloading} />
           <div>
             <Text align="center" size="xl" weight={"bold"} my="md">
               {currentPlaylistName}
@@ -221,7 +237,6 @@ function Playlist() {
               )}
             </Grid>
           </div>
-        </div>
       )}
     </AppShell>
   );
