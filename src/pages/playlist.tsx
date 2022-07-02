@@ -86,7 +86,7 @@ function Playlist() {
       header={<HeaderComponent />}
     >
       {!isAuthenticated ? (
-        <Text>Login first</Text>
+        <Title align="center">You need to login to access this page</Title>
       ) : (
         <div
           style={{ position: "relative", height: "100%", overflowX: "hidden" }}
@@ -147,7 +147,10 @@ function Playlist() {
                       | ReactPortal;
                   }) => (
                     <Grid.Col
-                    style={{ maxWidth: matches ? 300 : "100%", minWidth: 250 }}
+                      style={{
+                        maxWidth: matches ? 300 : "100%",
+                        minWidth: 250,
+                      }}
                       sm={4}
                       xs={4}
                       key={item._id}

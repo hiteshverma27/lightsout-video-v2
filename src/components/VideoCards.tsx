@@ -19,7 +19,7 @@ import { useVideo } from "../contexts/VideoContext";
 
 function VideoCard() {
   const theme = useMantineTheme();
-  const { videos, categoriesToFilter } = useVideo();
+  const { videos, categoriesToFilter, searchTerm } = useVideo();
   const navigate = useNavigate();
   const matches = useMediaQuery("(min-width: 425px)");
   const { setSingleVideo } = useVideo();
@@ -112,10 +112,15 @@ function VideoCard() {
       grow
     >
       {videos
-        .filter((item: { category: any }) =>
+        .filter((item: { category: any}) =>
           categoriesToFilter.length === 0
             ? item
             : categoriesToFilter.includes(item.category)
+        )
+        .filter((item: { title: string }) =>
+          searchTerm.length === 0
+            ? item
+            : item.title.toLowerCase().includes(searchTerm)
         )
         .map(
           (item: {

@@ -11,7 +11,7 @@ import {
   useMantineColorScheme,
   useMantineTheme,
 } from "@mantine/core";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   History,
   Logout,
@@ -28,6 +28,7 @@ import { useLogoutModal } from "../contexts/LogoutModalContext";
 import { useMobileDrawer } from "../contexts/MobileDrawerContext";
 import { AuthenticationForm } from "./AuthenticationForm";
 import { MobileNav } from "./MobileNav";
+import { SearchBar } from "./SearchBar";
 import { ThemeToggle } from "./ThemeToggleButton";
 import { successToast } from "./Toast";
 
@@ -38,6 +39,7 @@ function HeaderComponent() {
   const { toggleColorScheme } = useMantineColorScheme();
   const { authModalOpened, setAuthModalOpned } = useAuthModal();
   const navigate = useNavigate();
+  const location = useLocation();
   const {
     isAuthenticated,
     userData,
@@ -93,6 +95,7 @@ function HeaderComponent() {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            alignSelf:"left"
           }}
         >
           <Text
@@ -112,6 +115,15 @@ function HeaderComponent() {
             <Video color={theme.colors.blue[6]} style={{ margin: "0 1rem" }} />
           </Text>
         </div>
+        {location.pathname.includes("explore")&&
+        <MediaQuery smallerThan={"sm"} styles={{display:"none"}}>
+
+        <div style={{width:"35%"}}>
+
+        <SearchBar />
+        </div>
+        </MediaQuery>
+        }
         <div
           style={{
             display: "flex",

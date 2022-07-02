@@ -65,7 +65,7 @@ function PlaylistListing() {
       header={<HeaderComponent />}
     >
       {!isAuthenticated ? (
-        <Text>Login first</Text>
+        <Title align="center">You need to login to access this page</Title>
       ) : (
         <div style={{ position: "relative", height: "100%" }}>
           <LoadingOverlay visible={isloading} />
@@ -100,7 +100,6 @@ function PlaylistListing() {
                       shadow="sm"
                       onClick={() => {
                         navigate(`/playlist/${item._id}`);
-                        console.log(item._id);
                       }}
                     >
                       <Card.Section>

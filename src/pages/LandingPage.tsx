@@ -1,4 +1,4 @@
-import { AppShell, Text, useMantineTheme } from "@mantine/core";
+import { AppShell, Text, Title, useMantineTheme } from "@mantine/core";
 import { CategoryCard } from "../components";
 import { Footer } from "../components/Footer";
 import { HeaderComponent } from "../components/Header";
@@ -51,9 +51,9 @@ import { FooterData } from "../staticData/FooterData";
           </div>
         </MediaQuery> */}
       <Hero />
-      <Text size="xl" weight={500}>
+      <Title align="center">
         Categories
-      </Text>
+      </Title>
       <CategoryCard/>
     </AppShell>
   );

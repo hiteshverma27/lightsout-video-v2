@@ -207,21 +207,6 @@ function AuthenticationForm({
     setLoading(false);
   };
 
-  // const registerclickhandler = async (e: { (e: any): void; preventDefault?: any; }) => {
-  //   setLoading(true);
-  //   try {
-  //     const userData = await axios.post("/api/auth/signup", {
-  //       email: "hiteshverma222@gmail.com",
-  //       password: "hitesh123",
-  //     });
-  //     console.log(userData);
-  //   } catch (error) {
-  //     console.log(error);
-
-  //   }
-  //   setLoading(false);
-  // };
-
   const registerclickhandler = async () => {
     setLoading(true);
     try {

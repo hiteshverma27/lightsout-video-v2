@@ -1,4 +1,6 @@
 import {
+  Accordion,
+  AccordionItem,
   AppShell,
   Avatar,
   Button,
@@ -22,6 +24,7 @@ import { FooterData } from "../staticData/FooterData";
 import { useAuth } from "../contexts/AuthContext";
 import { useAuthModal } from "../contexts/AuthModalContext";
 import { useVideo } from "../contexts/VideoContext";
+import { createPlaylistHandler } from "../services";
 
 const useStyles = createStyles((theme) => ({
   actionButtons: {
@@ -155,7 +158,7 @@ function SingleVideo() {
         error.response.status === 409
           ? successToast("Video already exist in watch later!")
           : errorToast(
-              "Something went wrong while adding video to watch later!"
+              "Something went wrong while removing video to watch later!"
             );
       }
     };
@@ -205,7 +208,7 @@ function SingleVideo() {
         successToast("Video removed from liked videos!");
         setLikedVideos(likedVideos.data.likes);
       } catch (error) {
-        errorToast("Something went wrong!");
+        errorToast("Something went wrong while removing video from liked videos!");
       }
     };
     isAuthenticated
@@ -251,32 +254,7 @@ function SingleVideo() {
 
   useEffect(() => window.scrollTo(0, 0), []);
 
-  const createPlaylistHandler = (video, e) => {
-    e.preventDefault();
-    playListNameInput
-      ? (async () => {
-          try {
-            const res = await axios.post(
-              `/api/user/playlists`,
-              {
-                playlist: [
-                  {
-                    name: playListNameInput,
-                    videos: (prev) => [...prev, video],
-                  },
-                ],
-              }
-            );
-            setPlaylist(res.data.playlists);
-            setPlayListNameInput("");
-            successToast("Playlist created");
-          } catch (error) {
-            error.response.status === 500 &&
-              errorToast("Something went wrong while creating playlist!");
-          }
-        })()
-      : warningToast("Please enter playlist name!");
-  };
+  
 
   const getPlaylists = async () => {
     try {
@@ -298,10 +276,10 @@ function SingleVideo() {
         }
       );
 
-      successToast(`Video added to ${item[0].name} ${item._id}`);
+      successToast(`Video added to ${item[0].name}`);
     } catch (error) {
       error.response.status === 409
-        ? errorToast(`Video already exist in ${item[0].name} ${item._id}`)
+        ? errorToast(`Video already exist in ${item[0].name}`)
         : errorToast("SOmething went wrong when added video to playlist");
     }
     getPlaylists();
@@ -383,7 +361,7 @@ function SingleVideo() {
                   !Boolean(playListNameInput) ? "secondary" : "primary"
                 }-confirm my-1`}
                 disabled={!Boolean(playListNameInput)}
-                onClick={(e) => createPlaylistHandler(singleVideo, e)}
+                onClick={(e) => createPlaylistHandler(singleVideo, e,setPlaylist,setPlayListNameInput,playListNameInput)}
               >
                 Create playlist
               </Button>
@@ -436,7 +414,7 @@ function SingleVideo() {
             <Container m={0}>
               <Button
                 variant="subtle"
-                px={"0.5rem"}
+                px={"0.2rem"}
                 leftIcon={<ThumbUp />}
                 onClick={() => likeButtonHandler(singleVideo)}
               >
@@ -444,7 +422,7 @@ function SingleVideo() {
               </Button>
               <Button
                 variant="subtle"
-                px={"0.5rem"}
+                px={"0.2rem"}
                 leftIcon={<PlaylistAdd />}
                 onClick={() => {
                   isAuthenticated
@@ -456,7 +434,7 @@ function SingleVideo() {
               </Button>
               <Button
                 variant="subtle"
-                px={"0.5rem"}
+                px={"0.2rem"}
                 leftIcon={<History />}
                 onClick={() => watchLaterHandler(singleVideo)}
               >
@@ -464,9 +442,18 @@ function SingleVideo() {
               </Button>
             </Container>
           </div>
-          <Text className={classes.description} m="md" lineClamp={2}>
+          {/* <Text className={classes.description} m="md" lineClamp={2}>
             {description}
-          </Text>
+          </Text> */}
+          <Accordion style={{width:"100%"}}>
+
+          <AccordionItem label="Description">
+            <Text>
+
+            {description}
+            </Text>
+          </AccordionItem>
+          </Accordion>
         </Container>
       </div>
     </AppShell>
