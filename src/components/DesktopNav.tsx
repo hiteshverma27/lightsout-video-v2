@@ -1,9 +1,9 @@
 import { Button, createStyles, MediaQuery, Navbar } from "@mantine/core";
-import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Logout } from "tabler-icons-react";
+import { useAuth } from "../contexts/AuthContext";
+import { useLogoutModal } from "../contexts/LogoutModalContext";
 import { NavbarData } from "../staticData/NavbarData";
-import { useLogoutModal } from "../temp-context/LogoutModalContext";
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef("icon");
@@ -85,12 +85,12 @@ const useStyles = createStyles((theme, _params, getRef) => {
   };
 });
 
- function DesktopNav() {
+function DesktopNav() {
   const { classes, cx } = useStyles();
-  const [active, setActive] = useState("Billing");
   const navigate = useNavigate();
   const { setLogoutModalOpened } = useLogoutModal();
   const location = useLocation();
+  const { isAuthenticated } = useAuth();
 
   const links = NavbarData.map((item) => (
     <a
@@ -101,7 +101,6 @@ const useStyles = createStyles((theme, _params, getRef) => {
       key={item.label}
       onClick={(event) => {
         event.preventDefault();
-        setActive(item.label);
         navigate(item.link);
       }}
     >
@@ -117,19 +116,21 @@ const useStyles = createStyles((theme, _params, getRef) => {
       <Navbar height={700} width={{ sm: 250 }} p="md">
         <Navbar.Section grow>{links}</Navbar.Section>
 
-        <Navbar.Section className={classes.footer}>
-          <Button
-            className={classes.link}
-            onClick={(event: { preventDefault: () => void }) => {
-              event.preventDefault();
-              setLogoutModalOpened(true);
-            }}
-            style={{ marginBottom: "2rem" }}
-          >
-            <Logout className={classes.linkIcon} />
-            <span>Logout</span>
-          </Button>
-        </Navbar.Section>
+        {isAuthenticated && (
+          <Navbar.Section className={classes.footer}>
+            <Button
+              className={classes.link}
+              onClick={(event: { preventDefault: () => void }) => {
+                event.preventDefault();
+                setLogoutModalOpened(true);
+              }}
+              style={{ marginBottom: "2rem" }}
+            >
+              <Logout className={classes.linkIcon} />
+              <span>Logout</span>
+            </Button>
+          </Navbar.Section>
+        )}
       </Navbar>
     </MediaQuery>
   );

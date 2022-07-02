@@ -1,19 +1,21 @@
 import {
   ActionIcon,
+  Anchor,
   Container,
   createStyles,
   Group,
   Text,
 } from "@mantine/core";
 import {
-  BrandInstagram,
+  BrandGithub,
+  BrandLinkedin,
   BrandTwitter,
-  BrandYoutube,
   Video,
 } from "tabler-icons-react";
 
 const useStyles = createStyles((theme) => ({
   footer: {
+    width: "100%",
     marginTop: 20,
     paddingTop: theme.spacing.xl * 2,
     paddingBottom: theme.spacing.xl * 2,
@@ -121,7 +123,7 @@ interface FooterLinksProps {
   }[];
 }
 
- function Footer({ data }: FooterLinksProps) {
+function Footer({ data }: FooterLinksProps) {
   const { classes } = useStyles();
   const groups = data.map((group) => {
     const links = group.links.map((link, index) => (
@@ -163,6 +165,14 @@ interface FooterLinksProps {
           <Text size="xs" color="dimmed" className={classes.description}>
             Watch everything on F1 at one place
           </Text>
+          <Text
+            size="xs"
+            color="dimmed"
+            className={classes.description}
+            align="center"
+          >
+            Made by <Anchor size="sm" href="https://github.com/hiteshverma27">Hitesh</Anchor>
+          </Text>
         </div>
         <div className={classes.groups}>{groups}</div>
       </Container>
@@ -172,15 +182,24 @@ interface FooterLinksProps {
         </Text>
 
         <Group spacing={0} className={classes.social} position="right" noWrap>
-          <ActionIcon size="lg">
-            <BrandTwitter size={18} />
-          </ActionIcon>
-          <ActionIcon size="lg">
-            <BrandYoutube size={18} />
-          </ActionIcon>
-          <ActionIcon size="lg">
-            <BrandInstagram size={18} />
-          </ActionIcon>
+          <Anchor href="https://twitter.com/hitesh27v" target="_blank">
+            <ActionIcon size="lg">
+              <BrandTwitter size={18} />
+            </ActionIcon>
+          </Anchor>
+          <Anchor href="https://github.com/hiteshverma27" target="_blank">
+            <ActionIcon size="lg">
+              <BrandGithub size={18} />
+            </ActionIcon>
+          </Anchor>
+          <Anchor
+            href="https://www.linkedin.com/in/hiteshverma27/"
+            target="_blank"
+          >
+            <ActionIcon size="lg">
+              <BrandLinkedin size={18} />
+            </ActionIcon>
+          </Anchor>
         </Group>
       </Container>
     </footer>

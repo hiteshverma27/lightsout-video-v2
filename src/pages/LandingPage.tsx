@@ -1,4 +1,5 @@
-import { AppShell, Text, useMantineTheme } from "@mantine/core";
+import { AppShell, Text, Title, useMantineTheme } from "@mantine/core";
+import { useDocumentTitle } from "@mantine/hooks";
 import { CategoryCard } from "../components";
 import { Footer } from "../components/Footer";
 import { HeaderComponent } from "../components/Header";
@@ -7,6 +8,7 @@ import { FooterData } from "../staticData/FooterData";
 
  function Landingpage() {
   const theme = useMantineTheme();
+  useDocumentTitle(`LightsOut`)
   return (
     <AppShell
       padding={0}
@@ -51,9 +53,9 @@ import { FooterData } from "../staticData/FooterData";
           </div>
         </MediaQuery> */}
       <Hero />
-      <Text size="xl" weight={500}>
+      <Title align="center">
         Categories
-      </Text>
+      </Title>
       <CategoryCard/>
     </AppShell>
   );

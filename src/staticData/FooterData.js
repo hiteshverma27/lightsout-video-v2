@@ -1,67 +1,46 @@
 export const FooterData = {
-    "data": [
-      {
-        "title": "About",
-        "links": [
-          {
-            "label": "Features",
-            "link": "#"
-          },
-          {
-            "label": "Pricing",
-            "link": "#"
-          },
-          {
-            "label": "Support",
-            "link": "#"
-          },
-          {
-            "label": "Forums",
-            "link": "#"
-          }
-        ]
-      },
-      {
-        "title": "Project",
-        "links": [
-          {
-            "label": "Contribute",
-            "link": "#"
-          },
-          {
-            "label": "Media assets",
-            "link": "#"
-          },
-          {
-            "label": "Changelog",
-            "link": "#"
-          },
-          {
-            "label": "Releases",
-            "link": "#"
-          }
-        ]
-      },
-      {
-        "title": "Community",
-        "links": [
-          {
-            "label": "Join Discord",
-            "link": "#"
-          },
-          {
-            "label": "Follow on Twitter",
-            "link": "#"
-          },
-          {
-            "label": "Email newsletter",
-            "link": "#"
-          },
-          {
-            "label": "GitHub discussions",
-            "link": "#"
-          }
-        ]
-      }
-    ]
-  }
+  data: [
+    {
+      title: "Account",
+      links: [
+        {
+          label: "Liked Videos",
+          link: "#",
+        },
+        {
+          label: "Watch Later",
+          link: "#",
+        },
+        {
+          label: "Playlists",
+          link: "#",
+        },
+        {
+          label: "History",
+          link: "#",
+        },
+        {
+          label: "My Account",
+          link: "#",
+        },
+      ],
+    },
+    {
+      title: "Contact",
+      links: [
+        {
+          label: "+91-9888888888",
+          link: "#",
+        },
+        {
+          label: "team@lightsout.com",
+          link: "#",
+        },
+        {
+          label: "Indore, India",
+          link: "#",
+        },
+      ],
+    },
+  ],
+};

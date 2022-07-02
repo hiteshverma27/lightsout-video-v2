@@ -1,16 +1,9 @@
-import {
-  Badge,
-  Button,
-  Card,
-  Grid,
-  Group,
-  Image,
-  Text,
-  useMantineTheme,
-} from "@mantine/core";
+import { Card, Grid, Image, Text } from "@mantine/core";
+import { useNavigate } from "react-router-dom";
+import { categories } from "../backend/db/categories";
 
 function CategoryCard() {
-  const theme = useMantineTheme();
+  const navigate = useNavigate();
 
   return (
     <Grid
@@ -22,153 +15,33 @@ function CategoryCard() {
       }}
       mt="md"
     >
-      <Grid.Col
-        style={{ maxWidth: 300, minWidth: 250, alignSelf: "flex-start" }}
-        sm={4}
-        xs={4}
-      >
-        <Card shadow="sm" p="lg">
-          <Card.Section>
-            <Image src="https://images.unsplash.com/photo-1508176850193-21de4476f385?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" height={160} alt="Norway" />
-          </Card.Section>
-
-          <Group
-            position="apart"
-            style={{ marginBottom: 5, marginTop: theme.spacing.sm }}
-          >
-            <Text weight={500}>Norway Fjord Adventures</Text>
-            <Badge color="pink" variant="light">
-              On Sale
-            </Badge>
-          </Group>
-
-          <Text size="sm" style={{ lineHeight: 1.5 }}>
-            With Fjord Tours you can explore more of the magical fjord
-            landscapes with tours and activities on and around the fjords of
-            Norway
-          </Text>
-
-          <Button
-            variant="light"
-            color="blue"
-            fullWidth
-            style={{ marginTop: 14 }}
-          >
-            Book classic tour now
-          </Button>
-        </Card>
-      </Grid.Col>
-      <Grid.Col
-        style={{ maxWidth: 300, minWidth: 250, alignSelf: "flex-start" }}
-        sm={4}
-        xs={4}
-      >
-        <Card shadow="sm" p="lg">
-          <Card.Section>
-            <Image src="https://images.unsplash.com/photo-1508176850193-21de4476f385?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" height={160} alt="Norway" />
-          </Card.Section>
-
-          <Group
-            position="apart"
-            style={{ marginBottom: 5, marginTop: theme.spacing.sm }}
-          >
-            <Text weight={500}>Norway Fjord Adventures</Text>
-            <Badge color="pink" variant="light">
-              On Sale
-            </Badge>
-          </Group>
-
-          <Text size="sm" style={{ lineHeight: 1.5 }}>
-            With Fjord Tours you can explore more of the magical fjord
-            landscapes with tours and activities on and around the fjords of
-            Norway
-          </Text>
-
-          <Button
-            variant="light"
-            color="blue"
-            fullWidth
-            style={{ marginTop: 14 }}
-          >
-            Book classic tour now
-          </Button>
-        </Card>
-      </Grid.Col>
-      <Grid.Col
-        style={{ maxWidth: 300, minWidth: 250, alignSelf: "flex-start" }}
-        sm={4}
-        xs={4}
-      >
-        <Card shadow="sm" p="lg">
-          <Card.Section>
-            <Image src="https://images.unsplash.com/photo-1508176850193-21de4476f385?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" height={160} alt="Norway" />
-          </Card.Section>
-
-          <Group
-            position="apart"
-            style={{ marginBottom: 5, marginTop: theme.spacing.sm }}
-          >
-            <Text weight={500}>Norway Fjord Adventures</Text>
-            <Badge color="pink" variant="light">
-              On Sale
-            </Badge>
-          </Group>
-
-          <Text size="sm" style={{ lineHeight: 1.5 }}>
-            With Fjord Tours you can explore more of the magical fjord
-            landscapes with tours and activities on and around the fjords of
-            Norway
-          </Text>
-
-          <Button
-            variant="light"
-            color="blue"
-            fullWidth
-            style={{ marginTop: 14 }}
-          >
-            Book classic tour now
-          </Button>
-        </Card>
-      </Grid.Col>
-      <Grid.Col
-        style={{ maxWidth: 300, minWidth: 250, alignSelf: "flex-start" }}
-        sm={4}
-        xs={4}
-      >
-        <Card shadow="sm" p="lg">
-          <Card.Section>
-            <Image src="https://images.unsplash.com/photo-1508176850193-21de4476f385?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" height={160} alt="Norway" />
-          </Card.Section>
-
-          <Group
-            position="apart"
-            style={{ marginBottom: 5, marginTop: theme.spacing.sm }}
-          >
-            <Text weight={500}>Norway Fjord Adventures</Text>
-            <Badge color="pink" variant="light">
-              On Sale
-            </Badge>
-          </Group>
-
-          <Text size="sm" style={{ lineHeight: 1.5 }}>
-            With Fjord Tours you can explore more of the magical fjord
-            landscapes with tours and activities on and around the fjords of
-            Norway
-          </Text>
-
-          <Button
-            variant="light"
-            color="blue"
-            fullWidth
-            style={{ marginTop: 14 }}
-          >
-            Book classic tour now
-          </Button>
-        </Card>
-      </Grid.Col>
-      
+      {categories.map((item) => (
+        <Grid.Col
+          style={{
+            maxWidth: 300,
+            minWidth: 250,
+            alignSelf: "flex-start",
+            cursor: "pointer",
+          }}
+          sm={4}
+          xs={4}
+          key={item._id}
+          onClick={() => {
+            navigate("/explore");
+          }}
+        >
+          <Card shadow="sm" p="lg">
+            <Card.Section>
+              <Image src={item.image} height={160} alt={item.categoryName} />
+            </Card.Section>
+            <Text size="sm" my={"md"} style={{ lineHeight: 1.5 }}>
+              {item.description}
+            </Text>
+          </Card>
+        </Grid.Col>
+      ))}
     </Grid>
   );
 }
 
-export  {CategoryCard};
+export { CategoryCard };

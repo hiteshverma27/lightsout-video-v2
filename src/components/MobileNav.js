@@ -10,9 +10,11 @@ import {
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Logout, Video } from "tabler-icons-react";
+import { useAuth } from "../contexts/AuthContext";
+import { useLogoutModal } from "../contexts/LogoutModalContext";
+import { useMobileDrawer } from "../contexts/MobileDrawerContext";
 import { NavbarData } from "../staticData/NavbarData";
-import { useLogoutModal } from "../temp-context/LogoutModalContext";
-import { useMobileDrawer } from "../temp-context/MobileDrawerContext";
+import { successToast } from "./Toast";
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef("icon");
@@ -99,13 +101,19 @@ const useStyles = createStyles((theme, _params, getRef) => {
   };
 });
 
- function MobileNav() {
+function MobileNav() {
   const { classes, cx } = useStyles();
   const [active, setActive] = useState("Billing");
   const navigate = useNavigate();
   const { setSideNavOpen } = useMobileDrawer();
   const { setLogoutModalOpened } = useLogoutModal();
   const theme = useMantineTheme();
+  const {
+    isAuthenticated,
+    setToken,
+    setIsAuthenticated,
+    setUserData,
+  } = useAuth();
 
   const links = NavbarData.map((item) => (
     <a
@@ -125,6 +133,14 @@ const useStyles = createStyles((theme, _params, getRef) => {
       <span>{item.label}</span>
     </a>
   ));
+
+  const logoutHandler = async () => {
+    setToken("");
+    setIsAuthenticated(false);
+    setUserData({});
+    successToast("Logout Success!");
+    setLogoutModalOpened(false);
+  };
 
   return (
     <Navbar height={700} width={{ sm: 250 }} p="md">
@@ -155,21 +171,23 @@ const useStyles = createStyles((theme, _params, getRef) => {
         {links}
       </Navbar.Section>
 
-      <Navbar.Section className={classes.footer}>
-        <Button
-          color={"red"}
-          className={classes.link}
-          onClick={(event: { preventDefault: () => void }) => {
-            event.preventDefault();
-            setSideNavOpen(false);
-            setLogoutModalOpened(true);
-          }}
-          style={{ marginBottom: "2rem" }}
-        >
-          <Logout className={classes.linkIcon} />
-          <span>Logout</span>
-        </Button>
-      </Navbar.Section>
+      {isAuthenticated && (
+        <Navbar.Section className={classes.footer}>
+          <Button
+            color={"red"}
+            className={classes.link}
+            onClick={(event) => {
+              event.preventDefault();
+              setSideNavOpen(false);
+              setLogoutModalOpened(true);
+            }}
+            style={{ marginBottom: "2rem" }}
+          >
+            <Logout className={classes.linkIcon} onClick={logoutHandler} />
+            <span>Logout</span>
+          </Button>
+        </Navbar.Section>
+      )}
     </Navbar>
   );
 }

@@ -9,9 +9,11 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { Playlist } from "tabler-icons-react";
+import { useVideo } from "../contexts/VideoContext";
 
-function PlaylistCard() {
+function PlaylistCard(item) {
   const theme = useMantineTheme();
+  const { playlist } = useVideo();
 
   return (
     <Grid
@@ -24,17 +26,34 @@ function PlaylistCard() {
       mt="md"
       grow
     >
-      <Grid.Col
-        style={{ maxWidth: 300, minWidth: 250 }}
-        sm={4}
-        xs={4}
-      >
+      <Grid.Col style={{ maxWidth: 300, minWidth: 250 }} sm={4} xs={4}>
         <Card shadow="sm">
           <Card.Section>
             <Box className="playlist-card-image">
-              <Overlay opacity={0.8} color="#000" zIndex={5} style={{width:"40%",height:"160px", marginLeft:"auto", display:"flex", alignItems:"center", justifyContent:"center"}}>
-
-              <Text weight={600} style={{display:"flex", flexDirection:"column", alignItems:"center"}}>15 <Playlist/></Text>
+              <Overlay
+                opacity={0.8}
+                color="#000"
+                zIndex={5}
+                style={{
+                  width: "40%",
+                  height: "160px",
+                  marginLeft: "auto",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Text
+                  weight={600}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
+                  {item.videos.length}
+                  <Playlist />
+                </Text>
               </Overlay>
 
               <Image
@@ -52,7 +71,7 @@ function PlaylistCard() {
             <div style={{ display: "flex", maxWidth: "100%" }}>
               <div>
                 <Text weight={500} style={{ width: "100%" }}>
-                  Playlist title
+                  {item[0].name}
                 </Text>
                 {/* <Text weight={300} style={{ width: "100%" }}>
                   Creator
@@ -73,4 +92,4 @@ function PlaylistCard() {
   );
 }
 
-export  {PlaylistCard};
+export { PlaylistCard };
