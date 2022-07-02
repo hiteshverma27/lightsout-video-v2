@@ -134,7 +134,7 @@ export function ProfileStats() {
       <div className={classes.controls}>
         <div className={classes.date}>
           <Text align="center" color={"white"}>
-            Your journey with us
+            Your library
           </Text>
         </div>
       </div>

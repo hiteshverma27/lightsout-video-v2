@@ -22,6 +22,7 @@ import { ToastContainer } from 'react-toastify';
 import { WatchLater } from "./pages/WatchLater";
 import { LikedVideos } from "./pages/LikedVideos";
 import { Profile } from "./pages/Profile";
+import { SingleVideoSkeleton } from "./pages/SingleVideoSkeleton";
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
                       <Route path="/liked-videos" element={<LikedVideos />} />
                       <Route path="*" element={<NotFound />} />
                       <Route path="/video/:videoId" element={<SingleVideo />} />
+                      <Route path="/videos/:videoId" element={<SingleVideoSkeleton />} />
                       <Route path="/playlist/:playlistId" element={<Playlist />} />
                     </Routes>
                   </Paper>
