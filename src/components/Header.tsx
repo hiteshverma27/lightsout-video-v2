@@ -167,7 +167,7 @@ function HeaderComponent() {
               </Menu.Item>
               <Divider />
               <Menu.Label>Account</Menu.Label>
-              <Menu.Item icon={<Settings size={14} />}>Profile</Menu.Item>
+              <Menu.Item icon={<Settings size={14} />}onClick={() => navigate("/profile")}>Profile</Menu.Item>
               <Menu.Item
                 color={"red"}
                 icon={<Logout size={14} />}

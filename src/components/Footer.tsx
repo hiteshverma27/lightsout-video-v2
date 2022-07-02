@@ -1,14 +1,15 @@
 import {
   ActionIcon,
+  Anchor,
   Container,
   createStyles,
   Group,
   Text,
 } from "@mantine/core";
 import {
-  BrandInstagram,
+  BrandGithub,
+  BrandLinkedin,
   BrandTwitter,
-  BrandYoutube,
   Video,
 } from "tabler-icons-react";
 
@@ -173,15 +174,21 @@ function Footer({ data }: FooterLinksProps) {
         </Text>
 
         <Group spacing={0} className={classes.social} position="right" noWrap>
+          <Anchor href="https://twitter.com/hitesh27v" target="_blank">
+            <ActionIcon size="lg">
+              <BrandTwitter size={18} />
+            </ActionIcon>
+          </Anchor>
+          <Anchor href="https://github.com/hiteshverma27" target="_blank">
           <ActionIcon size="lg">
-            <BrandTwitter size={18} />
+            <BrandGithub size={18} />
           </ActionIcon>
+          </Anchor>
+          <Anchor href="https://www.linkedin.com/in/hiteshverma27/" target="_blank">
           <ActionIcon size="lg">
-            <BrandYoutube size={18} />
+            <BrandLinkedin size={18} />
           </ActionIcon>
-          <ActionIcon size="lg">
-            <BrandInstagram size={18} />
-          </ActionIcon>
+          </Anchor>
         </Group>
       </Container>
     </footer>

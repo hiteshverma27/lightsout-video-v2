@@ -21,6 +21,7 @@ import { VideoProvider } from "./contexts/VideoContext";
 import { ToastContainer } from 'react-toastify';
 import { WatchLater } from "./pages/WatchLater";
 import { LikedVideos } from "./pages/LikedVideos";
+import { Profile } from "./pages/Profile";
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
                       <Route path="/" element={<Landingpage />} />
                       <Route path="/explore" element={<VideoListing />} />
                       <Route path="/history" element={<History />} />
+                      <Route path="/profile" element={<Profile />} />
                       <Route path="/playlists" element={<PlaylistListing />} />
                       <Route path="/watch-later" element={<WatchLater />} />
                       <Route path="/liked-videos" element={<LikedVideos />} />
