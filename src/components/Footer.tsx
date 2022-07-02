@@ -165,6 +165,14 @@ function Footer({ data }: FooterLinksProps) {
           <Text size="xs" color="dimmed" className={classes.description}>
             Watch everything on F1 at one place
           </Text>
+          <Text
+            size="xs"
+            color="dimmed"
+            className={classes.description}
+            align="center"
+          >
+            Made by <Anchor size="sm" href="https://github.com/hiteshverma27">Hitesh</Anchor>
+          </Text>
         </div>
         <div className={classes.groups}>{groups}</div>
       </Container>
@@ -180,14 +188,17 @@ function Footer({ data }: FooterLinksProps) {
             </ActionIcon>
           </Anchor>
           <Anchor href="https://github.com/hiteshverma27" target="_blank">
-          <ActionIcon size="lg">
-            <BrandGithub size={18} />
-          </ActionIcon>
+            <ActionIcon size="lg">
+              <BrandGithub size={18} />
+            </ActionIcon>
           </Anchor>
-          <Anchor href="https://www.linkedin.com/in/hiteshverma27/" target="_blank">
-          <ActionIcon size="lg">
-            <BrandLinkedin size={18} />
-          </ActionIcon>
+          <Anchor
+            href="https://www.linkedin.com/in/hiteshverma27/"
+            target="_blank"
+          >
+            <ActionIcon size="lg">
+              <BrandLinkedin size={18} />
+            </ActionIcon>
           </Anchor>
         </Group>
       </Container>

@@ -3,6 +3,7 @@ import { createStyles, Container, Title, Text, Button, Group } from '@mantine/co
 import { useNavigate } from 'react-router-dom';
 import { HeaderComponent } from '../components/Header';
 import { Illustration } from '../assets/404illustration';
+import { useDocumentTitle } from '@mantine/hooks';
 
 const useStyles = createStyles((theme) => ({
   root: {
@@ -55,6 +56,7 @@ const useStyles = createStyles((theme) => ({
  function NotFound() {
   const { classes } = useStyles();
   const navigate = useNavigate()
+  useDocumentTitle(`404 - Not Found`);
 
   return (
     <div style={{height:"100vh"}}>

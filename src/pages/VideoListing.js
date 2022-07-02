@@ -7,6 +7,7 @@ import {
   Paper,
   useMantineTheme,
 } from "@mantine/core";
+import { useDocumentTitle } from "@mantine/hooks";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { categories } from "../backend/db/categories";
@@ -23,11 +24,8 @@ import { useVideo } from "../contexts/VideoContext";
 function VideoListing() {
   const [isloading, setIsloading] = useState(true);
   const { setVideos, categoriesToFilter, setCategoriesToFilter } = useVideo();
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setIsloading(false);
-  //   }, 500);
-  // }, []);
+  useDocumentTitle("Videos | LightsOut");
+  
   useEffect(() => {
     (async () => {
       setIsloading(true);

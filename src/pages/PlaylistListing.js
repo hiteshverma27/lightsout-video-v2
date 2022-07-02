@@ -13,6 +13,7 @@ import {
   Title,
   useMantineTheme,
 } from "@mantine/core";
+import { useDocumentTitle } from "@mantine/hooks";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -31,6 +32,7 @@ function PlaylistListing() {
   const { setPlaylist, playlist } = useVideo();
   const theme = useMantineTheme();
   const navigate = useNavigate();
+  useDocumentTitle(`Playlists | LightsOut`);
 
   useEffect(() => {
     !isAuthenticated && setAuthModalOpned(true);

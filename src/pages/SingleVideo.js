@@ -25,6 +25,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { useAuthModal } from "../contexts/AuthModalContext";
 import { useVideo } from "../contexts/VideoContext";
 import { createPlaylistHandler } from "../services";
+import { useDocumentTitle } from "@mantine/hooks";
 
 const useStyles = createStyles((theme) => ({
   actionButtons: {
@@ -129,6 +130,7 @@ function SingleVideo() {
   const [videoIsLiked, setVideoIsLiked] = useState(false);
   const [videoInWatchLater, setVideoInWatchLater] = useState(false);
   const [playListNameInput, setPlayListNameInput] = useState("");
+  useDocumentTitle(`${title} | LightsOut`)
 
   useEffect(() => {
     window.scrollTo(0, 0);

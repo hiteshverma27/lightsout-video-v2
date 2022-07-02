@@ -9,6 +9,7 @@ import {
   Title,
   useMantineTheme,
 } from "@mantine/core";
+import { useDocumentTitle } from "@mantine/hooks";
 import { useEffect, useState } from "react";
 import { Loading } from "../components";
 import { Footer } from "../components/Footer";
@@ -23,6 +24,7 @@ function Profile() {
   const { userData, isAuthenticated } = useAuth();
   const { setAuthModalOpned } = useAuthModal();
   const [loading, setLoading] = useState(false);
+  useDocumentTitle(`${userData.firstName} | LightsOut`);
   useEffect(() => {
     setLoading(true);
     !isAuthenticated && setAuthModalOpned(true);

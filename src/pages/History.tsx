@@ -12,7 +12,7 @@ import {
   Title,
   useMantineTheme,
 } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
+import { useDocumentTitle, useMediaQuery } from "@mantine/hooks";
 
 import axios from "axios";
 import {
@@ -41,6 +41,7 @@ function History() {
   const theme = useMantineTheme();
   const navigate = useNavigate();
   const matches = useMediaQuery("(min-width: 425px)");
+  useDocumentTitle("History | LightsOut");
   useEffect(() => {
     window.scrollTo(0, 0);
     !isAuthenticated && setAuthModalOpned(true);

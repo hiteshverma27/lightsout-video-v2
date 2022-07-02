@@ -12,7 +12,7 @@ import {
   Title,
   useMantineTheme,
 } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
+import { useDocumentTitle, useMediaQuery } from "@mantine/hooks";
 
 import axios from "axios";
 import {
@@ -41,6 +41,7 @@ function LikedVideos() {
   const theme = useMantineTheme();
   const matches = useMediaQuery("(min-width: 425px)");
   const navigate = useNavigate();
+  useDocumentTitle(`Liked Videos | LightsOut`);
   useEffect(() => {
     window.scrollTo(0, 0);
     !isAuthenticated && setAuthModalOpned(true);

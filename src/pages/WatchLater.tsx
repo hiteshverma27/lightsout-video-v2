@@ -12,7 +12,7 @@ import {
   Title,
   useMantineTheme,
 } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
+import { useDocumentTitle, useMediaQuery } from "@mantine/hooks";
 
 import axios from "axios";
 import {
@@ -41,6 +41,8 @@ function WatchLater() {
   const theme = useMantineTheme();
   const matches = useMediaQuery("(min-width: 425px)");
   const navigate = useNavigate();
+  useDocumentTitle("Watch Later | LightsOut");
+
   useEffect(() => {
     window.scrollTo(0, 0);
     !isAuthenticated && setAuthModalOpned(true);

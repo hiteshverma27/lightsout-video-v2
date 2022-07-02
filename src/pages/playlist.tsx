@@ -12,7 +12,7 @@ import {
   Title,
   useMantineTheme,
 } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
+import { useDocumentTitle, useMediaQuery } from "@mantine/hooks";
 
 import axios from "axios";
 import {
@@ -42,6 +42,7 @@ function Playlist() {
   const [currentPlaylistVideos, setCurrentPlayistVideos] = useState([]);
   const [currentPlaylistName, setCurrentPlayistName] = useState("");
   const { playlistId } = useParams();
+  useDocumentTitle(`${currentPlaylistName} | LightsOut`);
   useEffect(() => {
     window.scrollTo(0, 0);
     !isAuthenticated && setAuthModalOpned(true);
