@@ -12,6 +12,7 @@ import {
   Title,
   useMantineTheme,
 } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 
 import axios from "axios";
 import {
@@ -39,7 +40,9 @@ function History() {
   const { history, setHistory } = useVideo();
   const theme = useMantineTheme();
   const navigate = useNavigate();
+  const matches = useMediaQuery("(min-width: 425px)");
   useEffect(() => {
+    window.scrollTo(  0, 0 );
     !isAuthenticated && setAuthModalOpned(true);
     // eslint-disable-next-line
   }, []);
@@ -136,7 +139,7 @@ function History() {
                       | ReactPortal;
                   }) => (
                     <Grid.Col
-                      style={{ maxWidth: 300, minWidth: 250 }}
+                    style={{ maxWidth: matches ? 300 : "100%", minWidth: 250 }}
                       sm={4}
                       xs={4}
                       key={item._id}

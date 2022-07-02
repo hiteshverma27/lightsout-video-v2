@@ -12,6 +12,7 @@ import {
   Title,
   useMantineTheme,
 } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 
 import axios from "axios";
 import {
@@ -38,8 +39,10 @@ function LikedVideos() {
   const { setAuthModalOpned } = useAuthModal();
   const { setLikedVideos, likedVideos } = useVideo();
   const theme = useMantineTheme();
+  const matches = useMediaQuery("(min-width: 425px)");
   const navigate = useNavigate();
   useEffect(() => {
+    window.scrollTo(0, 0);
     !isAuthenticated && setAuthModalOpned(true);
     // eslint-disable-next-line
   }, []);
@@ -134,7 +137,7 @@ function LikedVideos() {
                       | ReactPortal;
                   }) => (
                     <Grid.Col
-                      style={{ maxWidth: 300, minWidth: 250 }}
+                      style={{ maxWidth: matches ? 300 : "100%", minWidth: 250 }}
                       sm={4}
                       xs={4}
                       key={item._id}
