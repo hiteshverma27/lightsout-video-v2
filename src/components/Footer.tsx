@@ -6,12 +6,14 @@ import {
   Group,
   Text,
 } from "@mantine/core";
+import { Link } from "react-router-dom";
 import {
   BrandGithub,
   BrandLinkedin,
   BrandTwitter,
   Video,
 } from "tabler-icons-react";
+import { IndexKind } from "typescript";
 
 const useStyles = createStyles((theme) => ({
   footer: {
@@ -127,12 +129,10 @@ function Footer({ data }: FooterLinksProps) {
   const { classes } = useStyles();
   const groups = data.map((group) => {
     const links = group.links.map((link, index) => (
-      <Text<"a">
+      <Text
         key={index}
         className={classes.link}
-        component="a"
-        href={link.link}
-        onClick={(event) => event.preventDefault()}
+        component={Link} variant="text" to={link.link}
       >
         {link.label}
       </Text>
@@ -140,7 +140,7 @@ function Footer({ data }: FooterLinksProps) {
 
     return (
       <div className={classes.wrapper} key={group.title}>
-        <Text className={classes.title}>{group.title}</Text>
+        <Text className={classes.title} >{group.title}</Text>
         {links}
       </div>
     );
