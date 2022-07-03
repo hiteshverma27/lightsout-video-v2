@@ -24,8 +24,9 @@ function Profile() {
   const { userData, isAuthenticated } = useAuth();
   const { setAuthModalOpned } = useAuthModal();
   const [loading, setLoading] = useState(false);
-  useDocumentTitle(`${userData.firstName} | LightsOut`);
+  useDocumentTitle(`${userData.firstName??"Profile"} | LightsOut`);
   useEffect(() => {
+    window.scrollTo(0, 0);
     setLoading(true);
     !isAuthenticated && setAuthModalOpned(true);
     setTimeout(() => {
