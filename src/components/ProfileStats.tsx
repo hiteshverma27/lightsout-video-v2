@@ -130,11 +130,11 @@ export function ProfileStats() {
   } = useVideo();
 
   return (
-    <div className={classes.root}>
+    <div className={classes.root} style={{margin:"2rem 0"}}>
       <div className={classes.controls}>
         <div className={classes.date}>
           <Text align="center" color={"white"}>
-            Your journey with us
+            Your library
           </Text>
         </div>
       </div>

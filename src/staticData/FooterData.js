@@ -5,23 +5,23 @@ export const FooterData = {
       links: [
         {
           label: "Liked Videos",
-          link: "#",
+          link: "/liked-videos",
         },
         {
           label: "Watch Later",
-          link: "#",
+          link: "/watch-later",
         },
         {
           label: "Playlists",
-          link: "#",
+          link: "/playlists",
         },
         {
           label: "History",
-          link: "#",
+          link: "/history",
         },
         {
           label: "My Account",
-          link: "#",
+          link: "/profile",
         },
       ],
     },

@@ -34,8 +34,8 @@ function CategoryCard() {
             <Card.Section>
               <Image src={item.image} height={160} alt={item.categoryName} />
             </Card.Section>
-            <Text size="sm" my={"md"} style={{ lineHeight: 1.5 }}>
-              {item.description}
+            <Text align="center" size="sm" my={"md"} weight="bold" style={{ lineHeight: 1.5 }}>
+              {item.categoryName}
             </Text>
           </Card>
         </Grid.Col>

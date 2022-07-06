@@ -1,6 +1,7 @@
 import {
   AppShell,
   Avatar,
+  Button,
   Center,
   Container,
   Paper,
@@ -17,15 +18,18 @@ import { HeaderComponent } from "../components/Header";
 import { ProfileStats } from "../components/ProfileStats";
 import { useAuth } from "../contexts/AuthContext";
 import { useAuthModal } from "../contexts/AuthModalContext";
+import { useLogoutModal } from "../contexts/LogoutModalContext";
 import { FooterData } from "../staticData/FooterData";
 
 function Profile() {
   const theme = useMantineTheme();
   const { userData, isAuthenticated } = useAuth();
   const { setAuthModalOpned } = useAuthModal();
+  const { setLogoutModalOpened } = useLogoutModal();
   const [loading, setLoading] = useState(false);
-  useDocumentTitle(`${userData.firstName} | LightsOut`);
+  useDocumentTitle(`${userData.firstName ?? "Profile"} | LightsOut`);
   useEffect(() => {
+    window.scrollTo(0, 0);
     setLoading(true);
     !isAuthenticated && setAuthModalOpned(true);
     setTimeout(() => {
@@ -51,47 +55,6 @@ function Profile() {
       header={<HeaderComponent />}
       footer={<Footer {...FooterData} />}
     >
-      {/* <MediaQuery largerThan={"sm"} styles={{ display: "none" }}>
-          <div>
-            <TextInput
-              icon={<Search size={18} />}
-              radius="xl"
-              size="md"
-              rightSection={
-                <ActionIcon
-                  size={32}
-                  radius="xl"
-                  color={theme.primaryColor}
-                  variant="filled"
-                >
-                  {theme.dir === "ltr" ? (
-                    <ArrowRight size={18} />
-                  ) : (
-                    <ArrowLeft size={18} />
-                  )}
-                </ActionIcon>
-              }
-              placeholder="Search questions"
-              rightSectionWidth={42}
-            />
-            <Divider mt={"md"}/>
-          </div>
-        </MediaQuery> */}
-      {/* <Container  color="white" m={0} style={{width:"100vw"}}>
-            <Title align="center" mt={"xl"}>
-                Your Profile
-            </Title>
-            <Center mt={"xl"}>
-
-            <Avatar size={"xl"} radius="xl"/>
-            </Center>
-            <Center>
-
-            <Stack>
-                <Text>Email</Text>
-            </Stack>
-            </Center> */}
-      {/* </Container> */}
       {!isAuthenticated ? (
         <Title align="center">You need to login to access your profile</Title>
       ) : loading ? (
@@ -99,7 +62,7 @@ function Profile() {
           <Loading />
         </Paper>
       ) : (
-        <Container>
+        <Container mt={"xl"} pt="xl">
           <Title align="center" my={"xl"}>
             Your Profile
           </Title>
@@ -113,7 +76,7 @@ function Profile() {
                 weight={"bold"}
                 style={{ display: "flex", alignItems: "center" }}
               >
-                Email : <Text>{userData.email}</Text>
+                Email : <Text ml={"sm"}>{userData.email}</Text>
               </Text>
               <Text
                 size="xl"
@@ -121,10 +84,20 @@ function Profile() {
                 style={{ display: "flex", alignItems: "center" }}
               >
                 Name :{" "}
-                <Text> {`${userData.firstName} ${userData.lastName}`}</Text>
+                <Text ml={"sm"}>
+                  {" "}
+                  {`${userData.firstName} ${userData.lastName}`}
+                </Text>
               </Text>
-              {/* <Text size="xl" weight={"bold"} style={{display:"flex", alignItems:"center"}}>Member since : <Text>{userData.createdAt.slice(0, 10)}</Text></Text> */}
             </Stack>
+            <Button
+              mt={"lg"}
+              color="red"
+              weight={"bold"}
+              onClick={() => setLogoutModalOpened(true)}
+            >
+              Logout
+            </Button>
           </Container>
           <ProfileStats />
         </Container>

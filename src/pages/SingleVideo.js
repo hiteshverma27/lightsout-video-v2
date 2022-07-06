@@ -7,12 +7,13 @@ import {
   Checkbox,
   Container,
   createStyles,
-  LoadingOverlay,
   Modal,
+  Skeleton,
   Text,
   TextInput,
   useMantineTheme,
 } from "@mantine/core";
+import { useDocumentTitle } from "@mantine/hooks";
 import { StopwatchIcon } from "@modulz/radix-icons";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -20,12 +21,12 @@ import { useParams } from "react-router-dom";
 import { Eye, History, PlaylistAdd, ThumbUp } from "tabler-icons-react";
 import { DesktopNav, Footer, HeaderComponent } from "../components";
 import { errorToast, successToast, warningToast } from "../components/Toast";
-import { FooterData } from "../staticData/FooterData";
 import { useAuth } from "../contexts/AuthContext";
 import { useAuthModal } from "../contexts/AuthModalContext";
 import { useVideo } from "../contexts/VideoContext";
 import { createPlaylistHandler } from "../services";
-import { useDocumentTitle } from "@mantine/hooks";
+import { DesktopNavSkeleton, HeaderSkeleton } from "../skeletonComponents";
+import { FooterData } from "../staticData/FooterData";
 
 const useStyles = createStyles((theme) => ({
   actionButtons: {
@@ -130,7 +131,7 @@ function SingleVideo() {
   const [videoIsLiked, setVideoIsLiked] = useState(false);
   const [videoInWatchLater, setVideoInWatchLater] = useState(false);
   const [playListNameInput, setPlayListNameInput] = useState("");
-  useDocumentTitle(`${title} | LightsOut`)
+  useDocumentTitle(`${title} | LightsOut`);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -166,10 +167,9 @@ function SingleVideo() {
     };
     const addToWatchLater = async (video) => {
       try {
-        const watchLaterVideo = await axios.post(
-          `/api/user/watchlater`,
-          { video }
-        );
+        const watchLaterVideo = await axios.post(`/api/user/watchlater`, {
+          video,
+        });
         successToast("Video added to watch later!");
         setWatchLater(watchLaterVideo.data.watchlater);
       } catch (error) {
@@ -189,10 +189,7 @@ function SingleVideo() {
   const likeButtonHandler = async (video) => {
     const addToLikedVideos = async (video) => {
       try {
-        const likedVideos = await axios.post(
-          `/api/user/likes`,
-          { video }
-        );
+        const likedVideos = await axios.post(`/api/user/likes`, { video });
         successToast("Video added to liked videos!");
         setLikedVideos(likedVideos.data.likes);
       } catch (error) {
@@ -210,7 +207,9 @@ function SingleVideo() {
         successToast("Video removed from liked videos!");
         setLikedVideos(likedVideos.data.likes);
       } catch (error) {
-        errorToast("Something went wrong while removing video from liked videos!");
+        errorToast(
+          "Something went wrong while removing video from liked videos!"
+        );
       }
     };
     isAuthenticated
@@ -225,10 +224,7 @@ function SingleVideo() {
   };
   const addToHistory = async (video) => {
     try {
-      await axios.post(
-        `/api/user/history`,
-        { video }
-      );
+      await axios.post(`/api/user/history`, { video });
     } catch (error) {
       error.response.status === 500 &&
         errorToast("Something went wrong while adding video to history!");
@@ -255,8 +251,6 @@ function SingleVideo() {
   });
 
   useEffect(() => window.scrollTo(0, 0), []);
-
-  
 
   const getPlaylists = async () => {
     try {
@@ -313,12 +307,44 @@ function SingleVideo() {
       }}
       navbarOffsetBreakpoint="xs"
       fixed
-      navbar={<DesktopNav />}
-      header={<HeaderComponent />}
+      navbar={isloading ? <DesktopNavSkeleton /> : <DesktopNav />}
+      header={isloading ? <HeaderSkeleton /> : <HeaderComponent />}
       footer={<Footer {...FooterData} />}
     >
-      <div style={{ position: "relative" }}>
-        <LoadingOverlay visible={isloading} />
+      {isloading ? (
+        <Container className={classes.container}>
+          <Skeleton height={"60vh"} width={"100%"} radius="lg" mb={"md"}/>
+          <Skeleton height={40} width={"90%"} mt="xl" />
+          <div className={classes.actionButtons}>
+            <Container
+              size={200}
+              className={classes.creatorProfile}
+              m={0}
+              pl={0}
+            >
+              <Skeleton height={50} width={50} radius="xl" ml={"sm"} />
+              <Container
+                p={0}
+                style={{ minWidth: "125px", maxWidth: "20rem" }}
+                my={"sm"}
+              >
+                <Skeleton width={90} height={20} ml="sm" />
+                <Container className={classes.viewsAndDuration}>
+                  <Skeleton width={40} height={15} mt="sm" ml="sm" />
+                  <Skeleton width={40} height={15} mt="sm" ml="sm" />
+                </Container>
+              </Container>
+            </Container>
+            <Container m={0} style={{ display: "flex" }}>
+              <Skeleton mx={".2rem"} width={80} height={40} />
+              <Skeleton mx={".2rem"} width={150} height={40} />
+              <Skeleton mx={".2rem"} width={120} height={40} />
+            </Container>
+          </div>
+        <Skeleton width={"100%"} height={50}/>
+
+        </Container>
+      ) : (
         <Container className={classes.container}>
           <Modal
             opened={playlistModal}
@@ -363,7 +389,15 @@ function SingleVideo() {
                   !Boolean(playListNameInput) ? "secondary" : "primary"
                 }-confirm my-1`}
                 disabled={!Boolean(playListNameInput)}
-                onClick={(e) => createPlaylistHandler(singleVideo, e,setPlaylist,setPlayListNameInput,playListNameInput)}
+                onClick={(e) =>
+                  createPlaylistHandler(
+                    singleVideo,
+                    e,
+                    setPlaylist,
+                    setPlayListNameInput,
+                    playListNameInput
+                  )
+                }
               >
                 Create playlist
               </Button>
@@ -447,17 +481,13 @@ function SingleVideo() {
           {/* <Text className={classes.description} m="md" lineClamp={2}>
             {description}
           </Text> */}
-          <Accordion style={{width:"100%"}}>
-
-          <AccordionItem label="Description">
-            <Text>
-
-            {description}
-            </Text>
-          </AccordionItem>
+          <Accordion style={{ width: "100%" }}>
+            <AccordionItem label="Description">
+              <Text>{description}</Text>
+            </AccordionItem>
           </Accordion>
         </Container>
-      </div>
+      )}
     </AppShell>
   );
 }

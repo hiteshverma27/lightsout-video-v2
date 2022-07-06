@@ -4,7 +4,7 @@ import {
   Chips,
   Divider,
   MediaQuery,
-  Paper,
+  Skeleton,
   useMantineTheme,
 } from "@mantine/core";
 import { useDocumentTitle } from "@mantine/hooks";
@@ -14,18 +14,20 @@ import { categories } from "../backend/db/categories";
 import {
   DesktopNav,
   HeaderComponent,
-  Loading,
   SearchBar,
   VideoCard,
 } from "../components";
 import { errorToast } from "../components/Toast";
 import { useVideo } from "../contexts/VideoContext";
+import { DesktopNavSkeleton } from "../skeletonComponents/DesktopNavSkeleton";
+import { HeaderSkeleton } from "../skeletonComponents/HeaderSkeleton";
+import { VideoCardSkeleton } from "../skeletonComponents/VideoCardSkeleton";
 
 function VideoListing() {
   const [isloading, setIsloading] = useState(true);
   const { setVideos, categoriesToFilter, setCategoriesToFilter } = useVideo();
   useDocumentTitle("Videos | LightsOut");
-  
+
   useEffect(() => {
     (async () => {
       setIsloading(true);
@@ -54,13 +56,33 @@ function VideoListing() {
       }}
       navbarOffsetBreakpoint="xs"
       fixed
-      navbar={<DesktopNav />}
-      header={<HeaderComponent />}
+      navbar={isloading ? <DesktopNavSkeleton /> : <DesktopNav />}
+      header={isloading ? <HeaderSkeleton /> : <HeaderComponent />}
     >
       {isloading ? (
-        <Paper>
-          <Loading />
-        </Paper>
+        <div>
+          <MediaQuery largerThan={"sm"} styles={{ display: "none" }}>
+            <div>
+              <Skeleton width={"100%"} height={50} />
+              <Divider mt={"md"} />
+            </div>
+          </MediaQuery>
+          <div
+            style={{
+              marginBottom: "1rem",
+              marginLeft: "1rem",
+              display: "flex",
+            }}
+          >
+            <Skeleton width={50} height={30} radius="lg" mx={"xs"} />
+            <Skeleton width={70} height={30} radius="lg" mx={"xs"} />
+            <Skeleton width={110} height={30} radius="lg" mx={"xs"} />
+            <Skeleton width={90} height={30} radius="lg" mx={"xs"} />
+          </div>
+
+          <Divider />
+          <VideoCardSkeleton />
+        </div>
       ) : (
         <div>
           <MediaQuery largerThan={"sm"} styles={{ display: "none" }}>
