@@ -1,4 +1,4 @@
-import { AppShell, Text, Title, useMantineTheme } from "@mantine/core";
+import { AppShell, Title, useMantineTheme } from "@mantine/core";
 import { useDocumentTitle } from "@mantine/hooks";
 import { CategoryCard } from "../components";
 import { Footer } from "../components/Footer";
@@ -6,9 +6,9 @@ import { HeaderComponent } from "../components/Header";
 import { Hero } from "../components/Hero";
 import { FooterData } from "../staticData/FooterData";
 
- function Landingpage() {
+function Landingpage() {
   const theme = useMantineTheme();
-  useDocumentTitle(`LightsOut`)
+  useDocumentTitle(`LightsOut`);
   return (
     <AppShell
       padding={0}
@@ -26,37 +26,9 @@ import { FooterData } from "../staticData/FooterData";
       header={<HeaderComponent />}
       footer={<Footer {...FooterData} />}
     >
-      {/* <MediaQuery largerThan={"sm"} styles={{ display: "none" }}>
-          <div>
-            <TextInput
-              icon={<Search size={18} />}
-              radius="xl"
-              size="md"
-              rightSection={
-                <ActionIcon
-                  size={32}
-                  radius="xl"
-                  color={theme.primaryColor}
-                  variant="filled"
-                >
-                  {theme.dir === "ltr" ? (
-                    <ArrowRight size={18} />
-                  ) : (
-                    <ArrowLeft size={18} />
-                  )}
-                </ActionIcon>
-              }
-              placeholder="Search questions"
-              rightSectionWidth={42}
-            />
-            <Divider mt={"md"}/>
-          </div>
-        </MediaQuery> */}
       <Hero />
-      <Title align="center">
-        Categories
-      </Title>
-      <CategoryCard/>
+      <Title align="center" m="xl">Categories</Title>
+      <CategoryCard />
     </AppShell>
   );
 }

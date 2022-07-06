@@ -54,6 +54,7 @@ function HeaderComponent() {
     setUserData({});
     successToast("Logout Success!");
     setLogoutModalOpened(false);
+    navigate("/explore");
   };
 
   return (
@@ -120,7 +121,7 @@ function HeaderComponent() {
 
         <div style={{width:"35%"}}>
 
-        <SearchBar />
+        <SearchBar/>
         </div>
         </MediaQuery>
         }

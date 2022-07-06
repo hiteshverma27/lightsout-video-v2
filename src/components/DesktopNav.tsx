@@ -1,8 +1,7 @@
-import { Button, createStyles, MediaQuery, Navbar } from "@mantine/core";
+import { createStyles, MediaQuery, Navbar } from "@mantine/core";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Logout } from "tabler-icons-react";
+import { UserCircle } from "tabler-icons-react";
 import { useAuth } from "../contexts/AuthContext";
-import { useLogoutModal } from "../contexts/LogoutModalContext";
 import { NavbarData } from "../staticData/NavbarData";
 
 const useStyles = createStyles((theme, _params, getRef) => {
@@ -26,6 +25,9 @@ const useStyles = createStyles((theme, _params, getRef) => {
           ? theme.colors.dark[4]
           : theme.colors.gray[2]
       }`,
+      "&:hover": {
+        cursor: "pointer",
+      },
     },
 
     link: {
@@ -88,7 +90,6 @@ const useStyles = createStyles((theme, _params, getRef) => {
 function DesktopNav() {
   const { classes, cx } = useStyles();
   const navigate = useNavigate();
-  const { setLogoutModalOpened } = useLogoutModal();
   const location = useLocation();
   const { isAuthenticated } = useAuth();
 
@@ -104,31 +105,26 @@ function DesktopNav() {
         navigate(item.link);
       }}
     >
-      {/* <Text component={Link} variant="text" to={item.link}> */}
       <item.icon className={classes.linkIcon} />
       <span>{item.label}</span>
-      {/* </Text> */}
     </a>
   ));
 
   return (
     <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
-      <Navbar height={700} width={{ sm: 250 }} p="md">
+      <Navbar height={"100vh"} width={{ sm: 250 }} p="md">
         <Navbar.Section grow>{links}</Navbar.Section>
 
         {isAuthenticated && (
-          <Navbar.Section className={classes.footer}>
-            <Button
+          <Navbar.Section className={classes.footer} mb="xl" pb={"xl"}>
+            <a
               className={classes.link}
-              onClick={(event: { preventDefault: () => void }) => {
-                event.preventDefault();
-                setLogoutModalOpened(true);
-              }}
               style={{ marginBottom: "2rem" }}
+              href="/profile"
             >
-              <Logout className={classes.linkIcon} />
-              <span>Logout</span>
-            </Button>
+              <UserCircle className={classes.linkIcon} />
+              <span>Profile</span>
+            </a>
           </Navbar.Section>
         )}
       </Navbar>

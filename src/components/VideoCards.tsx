@@ -24,84 +24,6 @@ function VideoCard() {
   const matches = useMediaQuery("(min-width: 425px)");
   const { setSingleVideo } = useVideo();
 
-  // const likeButtonHandler = async (video: {
-  //   _id: Key;
-  //   thumbnail: string;
-  //   avatar: string;
-  //   title:
-  //     | string
-  //     | number
-  //     | boolean
-  //     | ReactFragment
-  //     | ReactPortal
-  //     | ReactElement<any, string | JSXElementConstructor<any>>;
-  //   creator:
-  //     | string
-  //     | number
-  //     | boolean
-  //     | ReactFragment
-  //     | ReactPortal
-  //     | ReactElement<any, string | JSXElementConstructor<any>>;
-  //   views:
-  //     | string
-  //     | number
-  //     | boolean
-  //     | ReactFragment
-  //     | ReactPortal
-  //     | ReactElement<any, string | JSXElementConstructor<any>>;
-  //   duration:
-  //     | string
-  //     | number
-  //     | boolean
-  //     | ReactFragment
-  //     | ReactPortal
-  //     | ReactElement<any, string | JSXElementConstructor<any>>;
-  // }) => {
-  //   const addToLikedVideos = async (video: any) => {
-  //     try {
-  //       const likedVideos = await axios.post(
-  //         `/api/user/likes`,
-  //         { video },
-  //         {
-  //           headers: { authorization: token },
-  //         }
-  //       );
-  //       successToast("Video added to liked videos!");
-  //       setLikedVideos(likedVideos.data.likes);
-  //     } catch (error) {
-  //       errorToast("Something went wrong while adding video to liked videos!");
-  //     }
-  //   };
-
-  //   const removeFromLikedVideos = async (video: { _id: any }) => {
-  //     try {
-  //       const likedVideos = await axios.delete(`/api/user/likes/${video._id}`, {
-  //         headers: { authorization: token },
-  //       });
-  //       successToast("Video removed from liked videos!");
-  //       setLikedVideos(likedVideos.data.likes);
-  //     } catch (error) {
-  //       errorToast("Something went wrong!");
-  //     }
-  //   };
-  //   isAuthenticated
-  //     ? videoIsLiked
-  //       ? removeFromLikedVideos(video)
-  //       : addToLikedVideos(video)
-  //     : ifNotAuthenticated();
-  // };
-  // const ifNotAuthenticated = () => {
-  //   setAuthModalOpned(true);
-  //   warningToast("You must be logged in!");
-  // };
-  // useEffect(
-  //   () =>
-  //     likedVideos.filter((item: { _id: any }) => item._id === currentVideoId)
-  //       .length === 1
-  //       ? setVideoIsLiked(true)
-  //       : setVideoIsLiked(false),
-  //   [likedVideos, currentVideoId]
-  // );
   return (
     <Grid
       justify="center"
@@ -112,7 +34,7 @@ function VideoCard() {
       grow
     >
       {videos
-        .filter((item: { category: any}) =>
+        .filter((item: { category: any }) =>
           categoriesToFilter.length === 0
             ? item
             : categoriesToFilter.includes(item.category)
@@ -168,13 +90,17 @@ function VideoCard() {
                 )
               }
             >
-              <Card shadow="sm" onClick={() => navigate(`/video/${item._id}`)}>
-                <Card.Section >
+              <Card
+                shadow="sm"
+                pb={0}
+                onClick={() => navigate(`/video/${item._id}`)}
+              >
+                <Card.Section>
                   <Image
                     src={item.thumbnail}
                     height={matches ? 160 : 200}
                     alt="Norway"
-                  />
+                  ></Image>
                 </Card.Section>
 
                 <Group
@@ -213,25 +139,6 @@ function VideoCard() {
                     </div>
                   </div>
                 </Group>
-                {/* <Menu
-                  trigger="hover"
-                  style={{ position: "absolute", right: "10%", bottom: "20%" }}
-                >
-                  <Menu.Item
-                    icon={<ThumbUp color={theme.colors.blue[6]} size={14} />}
-                    onClick={() => {likeButtonHandler(item)
-                    setCurrentVideoId(item._id)}}
-                  >
-                    {videoIsLiked ? "Liked" : "Like"}
-                  </Menu.Item>
-                  <Menu.Item icon={<Clock size={14} />}>
-                    Save to watch later
-                  </Menu.Item>
-                  <Menu.Item icon={<Playlist size={14} />}>
-                    Add to playlist
-                  </Menu.Item>
-                  <Menu.Item icon={<Share size={14} />}>Share</Menu.Item>
-                </Menu> */}
               </Card>
             </Grid.Col>
           )

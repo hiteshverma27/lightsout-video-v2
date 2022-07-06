@@ -1,4 +1,4 @@
-import { TextInput, TextInputProps } from "@mantine/core";
+import { TextInput } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import { useEffect, useState } from "react";
 import { Search } from "tabler-icons-react";
@@ -9,8 +9,7 @@ export function SearchBar() {
   const [value, setValue] = useState("");
   const [debounced] = useDebouncedValue(value, 1000);
 
-  useEffect(()=>setSearchTerm(debounced), [debounced]);
-  ;
+  useEffect(() => setSearchTerm(debounced), [debounced, setSearchTerm]);
   return (
     <TextInput
       icon={<Search size={18} />}
