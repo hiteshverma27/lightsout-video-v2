@@ -138,7 +138,7 @@ function VideoCard() {
                         style={{ width: "100%", fontSize: "small" }}
                         align="left"
                       >
-                        {item.views} . {item.duration}
+                        {item.views}
                       </Text>
                     </div>
                   </div>
