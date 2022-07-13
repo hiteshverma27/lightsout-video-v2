@@ -1,4 +1,4 @@
-import { createStyles, MediaQuery, Navbar } from "@mantine/core";
+import { Button, createStyles, MediaQuery, Navbar } from "@mantine/core";
 import { useLocation, useNavigate } from "react-router-dom";
 import { UserCircle } from "tabler-icons-react";
 import { useAuth } from "../contexts/AuthContext";
@@ -117,14 +117,14 @@ function DesktopNav() {
 
         {isAuthenticated && (
           <Navbar.Section className={classes.footer} mb="xl" pb={"xl"}>
-            <a
+            <Button
               className={classes.link}
+              onClick={() => navigate("/profile")}
               style={{ marginBottom: "2rem" }}
-              href="/profile"
             >
               <UserCircle className={classes.linkIcon} />
               <span>Profile</span>
-            </a>
+            </Button>
           </Navbar.Section>
         )}
       </Navbar>

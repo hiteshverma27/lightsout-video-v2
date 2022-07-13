@@ -12,7 +12,6 @@
 }
 .video-card:hover{
   transform: scale(1.05);
-  transition-delay: 2s;
 }
 
 .App-logo {

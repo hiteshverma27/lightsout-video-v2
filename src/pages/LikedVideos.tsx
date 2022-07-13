@@ -3,11 +3,12 @@ import {
   Avatar,
   Button,
   Card,
+  Container,
   Divider,
   Grid,
   Group,
   Image,
-  LoadingOverlay,
+  Menu,
   Skeleton,
   Text,
   Title,
@@ -15,7 +16,6 @@ import {
 } from "@mantine/core";
 import { useDocumentTitle, useMediaQuery } from "@mantine/hooks";
 
-import axios from "axios";
 import {
   JSXElementConstructor,
   Key,
@@ -26,14 +26,15 @@ import {
   useState,
 } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { CardMenu } from "../components";
+import { ThumbUp } from "tabler-icons-react";
+import { NoVideos } from "../assets/NoVideos";
 import { DesktopNav } from "../components/DesktopNav";
 import { HeaderComponent } from "../components/Header";
-import { errorToast } from "../components/Toast";
 import { useAuth } from "../contexts/AuthContext";
 import { useAuthModal } from "../contexts/AuthModalContext";
 import { useVideo } from "../contexts/VideoContext";
-import { DesktopNavSkeleton, HeaderSkeleton, VideoCardSkeleton } from "../skeletonComponents";
+import { getLikedVideos, removeFromLikedVideos } from "../services";
+import { VideoCardSkeleton } from "../skeletonComponents";
 
 function LikedVideos() {
   const [isloading, setIsloading] = useState(true);
@@ -50,17 +51,7 @@ function LikedVideos() {
     // eslint-disable-next-line
   }, []);
   useEffect(() => {
-    const getLikedVideos = async () => {
-      setIsloading(true);
-      try {
-        const res = await axios.get(`/api/user/likes`);
-        setLikedVideos(res.data.likes);
-      } catch (error) {
-        errorToast("Something went wrong while adding video to history!");
-      }
-      setIsloading(false);
-    };
-    isAuthenticated && getLikedVideos();
+    isAuthenticated && getLikedVideos(setIsloading, setLikedVideos);
   }, [isAuthenticated, token, setLikedVideos]);
 
   return (
@@ -75,12 +66,12 @@ function LikedVideos() {
       }}
       navbarOffsetBreakpoint="xs"
       fixed
-      navbar={isloading ? <DesktopNavSkeleton /> : <DesktopNav />}
-      header={isloading ? <HeaderSkeleton /> : <HeaderComponent />}
+      navbar={<DesktopNav />}
+      header={<HeaderComponent />}
     >
       {!isAuthenticated ? (
         <Title align="center">You need to login to access this page</Title>
-      )   : isloading ? (
+      ) : isloading ? (
         <div>
           <div
             style={{
@@ -99,134 +90,151 @@ function LikedVideos() {
           <VideoCardSkeleton />
         </div>
       ) : (
-          <div>
-            <Text align="center" size="xl" weight={"bold"} my="md">
-              Liked Videos
-            </Text>
-            <Divider />
-            <Grid
-              style={{
-                overflowX: "hidden",
-              }}
-              mt="md"
-              grow
-            >
-              {likedVideos.length === 0 ? (
-                <Title>
-                  No videos here yet{" "}
+        <div>
+          <Text align="center" size="xl" weight={"bold"} my="md">
+            Liked Videos
+          </Text>
+          <Divider />
+          <Grid
+            style={{
+              overflowX: "hidden",
+            }}
+            mt="md"
+            grow
+          >
+            {likedVideos.length === 0 ? (
+              <Container>
+                <NoVideos />
+                <Title align="center">No videos here yet </Title>
+                <Text align="center" my={"lg"}>
                   <Button component={Link} to={"/explore"}>
                     Explore Videos
                   </Button>
-                </Title>
-              ) : (
-                likedVideos.map(
-                  (item: {
-                    _id: Key;
-                    thumbnail: string;
-                    avatar: string;
-                    title:
-                      | string
-                      | number
-                      | boolean
-                      | ReactElement<any, string | JSXElementConstructor<any>>
-                      | ReactFragment
-                      | ReactPortal;
-                    creator:
-                      | string
-                      | number
-                      | boolean
-                      | ReactElement<any, string | JSXElementConstructor<any>>
-                      | ReactFragment
-                      | ReactPortal;
-                    views:
-                      | string
-                      | number
-                      | boolean
-                      | ReactElement<any, string | JSXElementConstructor<any>>
-                      | ReactFragment
-                      | ReactPortal;
-                    duration:
-                      | string
-                      | number
-                      | boolean
-                      | ReactElement<any, string | JSXElementConstructor<any>>
-                      | ReactFragment
-                      | ReactPortal;
-                  }) => (
-                    <Grid.Col
+                </Text>
+              </Container>
+            ) : (
+              likedVideos.map(
+                (item: {
+                  _id: Key;
+                  thumbnail: string;
+                  avatar: string;
+                  title:
+                    | string
+                    | number
+                    | boolean
+                    | ReactElement<any, string | JSXElementConstructor<any>>
+                    | ReactFragment
+                    | ReactPortal;
+                  creator:
+                    | string
+                    | number
+                    | boolean
+                    | ReactElement<any, string | JSXElementConstructor<any>>
+                    | ReactFragment
+                    | ReactPortal;
+                  views:
+                    | string
+                    | number
+                    | boolean
+                    | ReactElement<any, string | JSXElementConstructor<any>>
+                    | ReactFragment
+                    | ReactPortal;
+                  duration:
+                    | string
+                    | number
+                    | boolean
+                    | ReactElement<any, string | JSXElementConstructor<any>>
+                    | ReactFragment
+                    | ReactPortal;
+                }) => (
+                  <Grid.Col
+                    style={{
+                      maxWidth: matches ? 300 : "100%",
+                      minWidth: 250,
+                      position: "relative",
+                    }}
+                    sm={4}
+                    xs={4}
+                    key={item._id}
+                  >
+                    <Card
+                      shadow="sm"
+                      onClick={() => navigate(`/video/${item._id}`)}
                       style={{
-                        maxWidth: matches ? 300 : "100%",
-                        minWidth: 250,
+                        cursor: "pointer",
                       }}
-                      sm={4}
-                      xs={4}
-                      key={item._id}
                     >
-                      <Card
-                        shadow="sm"
-                        onClick={() => navigate(`/video/${item._id}`)}
+                      <Card.Section>
+                        <Image src={item.thumbnail} height={160} alt="Norway" />
+                      </Card.Section>
+
+                      <Group
+                        position="apart"
                         style={{
-                          cursor: "pointer",
+                          marginBottom: 5,
+                          marginTop: theme.spacing.sm,
                         }}
                       >
-                        <Card.Section>
-                          <Image
-                            src={item.thumbnail}
-                            height={160}
-                            alt="Norway"
+                        <div style={{ display: "flex", maxWidth: "80%" }}>
+                          <Avatar
+                            src={item.avatar}
+                            alt="it's me"
+                            size={"sm"}
+                            radius="xl"
+                            mr={"sm"}
+                            mt="xs"
                           />
-                        </Card.Section>
-
-                        <Group
-                          position="apart"
-                          style={{
-                            marginBottom: 5,
-                            marginTop: theme.spacing.sm,
-                          }}
-                        >
-                          <div style={{ display: "flex", maxWidth: "80%" }}>
-                            <Avatar
-                              src={item.avatar}
-                              alt="it's me"
-                              size={"sm"}
-                              radius="xl"
-                              mr={"sm"}
-                              mt="xs"
-                            />
-                            <div>
-                              <Text
-                                weight={500}
-                                style={{ width: "100%" }}
-                                lineClamp={2}
-                                align="left"
-                              >
-                                {item.title}
-                              </Text>
-                              <Text
-                                weight={300}
-                                style={{ width: "100%" }}
-                                align="left"
-                              >
-                                {item.creator}
-                              </Text>
-                              <Text
-                                weight={300}
-                                style={{ width: "100%", fontSize: "small" }}
-                                align="left"
-                              >
-                                {item.views} . 1 year ago . {item.duration}
-                              </Text>
-                            </div>
+                          <div>
+                            <Text
+                              weight={500}
+                              style={{ width: "100%" }}
+                              lineClamp={2}
+                              align="left"
+                            >
+                              {item.title}
+                            </Text>
+                            <Text
+                              weight={300}
+                              style={{ width: "100%" }}
+                              align="left"
+                            >
+                              {item.creator}
+                            </Text>
+                            <Text
+                              weight={300}
+                              style={{ width: "100%", fontSize: "small" }}
+                              align="left"
+                            >
+                              {item.views} . {item.duration}
+                            </Text>
                           </div>
-                          <CardMenu />
-                        </Group>
-                      </Card>
-                    </Grid.Col>
-                  )
+                        </div>
+                      </Group>
+                    </Card>
+                    <Menu
+                      trigger="hover"
+                      style={{
+                        position: "absolute",
+                        right: "10%",
+                        bottom: "30%",
+                      }}
+                      position="right"
+                    >
+                      <Menu.Item
+                        icon={<ThumbUp color={theme.colors.red[6]} size={14} />}
+                        onClick={() =>
+                          removeFromLikedVideos(item._id, setLikedVideos)
+                        }
+                      >
+                        Remove from liked
+                      </Menu.Item>
+                    </Menu>
+                  </Grid.Col>
                 )
-              )}
-            </Grid>
-          </div>
+              )
+            )}
+          </Grid>
+        </div>
       )}
     </AppShell>
   );

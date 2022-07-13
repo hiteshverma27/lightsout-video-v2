@@ -58,19 +58,6 @@ export const videos = [
     category: "F1 Explained",
   },
   {
-    _id: "hgLQWIAaCmY",
-    title: "Formula 1 - Everything You Need to Know | Up to Speed",
-    creator: "Donut Media",
-    avatar:
-      "https://yt3.ggpht.com/ytc/AKedOLSE8OsDBz1krAyAQpGaZFg-pbF7Tr24IJq_HokKOA=s176-c-k-c0x00ffffff-no-rj",
-    thumbnail: "https://i.ytimg.com/vi/hgLQWIAaCmY/maxresdefault.jpg",
-    views: "2.3M",
-    duration: "12:44",
-    description:
-      "Formula One is the pinnacle of both driver ability and automotive design; The best drivers in the world driving the most advanced cars on the planet. The sport’s history is chock full of great cars and legendary drivers, that Formula 1 has elevated from mere sport to worldwide phenomenon. Join James Pumphrey as he tells you everything you need to know about the world’s most  monumental motorsport. From gentleman drivers racing around european backroads, to the wild 70s ruled by James Hunt and Niki Lauda, the legends of Aryton Senna and Michael Schumacher, and the Turbo V6 monsters of F1 today. Get your helmet and strap in...it’s time for Formula One! \n\nUp to Speed is a weekly automotive history show about the best cars, brands, designers, drivers and influencers ever. Host James Pumphrey covers everything from the Toyota Supra to the Chevy El Camino, The VW GTI to the Subaru WRX. The origins of every car will be uncovered to get you Up to Speed..\n\nSome of our best videos ever are coming out soon, stay tuned so you won't miss a thing!\n►Subscribe here: http://bit.ly/1JQ3qvO\n\nCheck out more Donut Media Videos: https://youtu.be/Pz8IGLgFE2s?list=PLF…\n\nWant a Donut shirt or sticker?  Visit https://shop.donut.media/\n\nLike us on Facebook: https://www.facebook.com/donutmedia/\n\nClick here if you want to learn more about Donut Media: http://www.donut.media/\n\nDonut Media is at the center of digital media for the next generation of automotive and motorsports enthusiasts. We are drivers, drifters, and car enthusiasts who love to tell stories.",
-    category: "F1 Explained",
-  },
-  {
     _id: "NBWfnOhc34I",
     title: "Why F1 Banned Their Best Car",
     creator: "Donut Media",

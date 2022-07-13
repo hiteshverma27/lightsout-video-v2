@@ -19,13 +19,11 @@ import {
 } from "../components";
 import { errorToast } from "../components/Toast";
 import { useVideo } from "../contexts/VideoContext";
-import { DesktopNavSkeleton } from "../skeletonComponents/DesktopNavSkeleton";
-import { HeaderSkeleton } from "../skeletonComponents/HeaderSkeleton";
 import { VideoCardSkeleton } from "../skeletonComponents/VideoCardSkeleton";
 
 function VideoListing() {
   const [isloading, setIsloading] = useState(true);
-  const { setVideos, categoriesToFilter, setCategoriesToFilter } = useVideo();
+  const { setVideos, setCategoriesToFilter } = useVideo();
   useDocumentTitle("Videos | LightsOut");
 
   useEffect(() => {
@@ -56,8 +54,8 @@ function VideoListing() {
       }}
       navbarOffsetBreakpoint="xs"
       fixed
-      navbar={isloading ? <DesktopNavSkeleton /> : <DesktopNav />}
-      header={isloading ? <HeaderSkeleton /> : <HeaderComponent />}
+      navbar={<DesktopNav />}
+      header={<HeaderComponent />}
     >
       {isloading ? (
         <div>

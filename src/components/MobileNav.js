@@ -9,12 +9,10 @@ import {
 } from "@mantine/core";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Logout, Video } from "tabler-icons-react";
+import { UserCircle, Video } from "tabler-icons-react";
 import { useAuth } from "../contexts/AuthContext";
-import { useLogoutModal } from "../contexts/LogoutModalContext";
 import { useMobileDrawer } from "../contexts/MobileDrawerContext";
 import { NavbarData } from "../staticData/NavbarData";
-import { successToast } from "./Toast";
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef("icon");
@@ -106,14 +104,8 @@ function MobileNav() {
   const [active, setActive] = useState("Billing");
   const navigate = useNavigate();
   const { setSideNavOpen } = useMobileDrawer();
-  const { setLogoutModalOpened } = useLogoutModal();
   const theme = useMantineTheme();
-  const {
-    isAuthenticated,
-    setToken,
-    setIsAuthenticated,
-    setUserData,
-  } = useAuth();
+  const { isAuthenticated } = useAuth();
 
   const links = NavbarData.map((item) => (
     <a
@@ -133,14 +125,6 @@ function MobileNav() {
       <span>{item.label}</span>
     </a>
   ));
-
-  const logoutHandler = async () => {
-    setToken("");
-    setIsAuthenticated(false);
-    setUserData({});
-    successToast("Logout Success!");
-    setLogoutModalOpened(false);
-  };
 
   return (
     <Navbar height={700} width={{ sm: 250 }} p="md">
@@ -174,17 +158,16 @@ function MobileNav() {
       {isAuthenticated && (
         <Navbar.Section className={classes.footer}>
           <Button
-            color={"red"}
             className={classes.link}
             onClick={(event) => {
               event.preventDefault();
+              navigate("/profile");
               setSideNavOpen(false);
-              setLogoutModalOpened(true);
             }}
             style={{ marginBottom: "2rem" }}
           >
-            <Logout className={classes.linkIcon} onClick={logoutHandler} />
-            <span>Logout</span>
+            <UserCircle className={classes.linkIcon} />
+            <span>Profile</span>
           </Button>
         </Navbar.Section>
       )}

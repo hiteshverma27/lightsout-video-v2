@@ -3,10 +3,12 @@ import {
   Avatar,
   Button,
   Card,
+  Container,
   Divider,
   Grid,
   Group,
   Image,
+  Menu,
   Skeleton,
   Text,
   Title,
@@ -14,7 +16,6 @@ import {
 } from "@mantine/core";
 import { useDocumentTitle, useMediaQuery } from "@mantine/hooks";
 
-import axios from "axios";
 import {
   JSXElementConstructor,
   Key,
@@ -25,18 +26,15 @@ import {
   useState,
 } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { CardMenu } from "../components";
+import { Clock } from "tabler-icons-react";
+import { NoVideos } from "../assets/NoVideos";
 import { DesktopNav } from "../components/DesktopNav";
 import { HeaderComponent } from "../components/Header";
-import { errorToast } from "../components/Toast";
 import { useAuth } from "../contexts/AuthContext";
 import { useAuthModal } from "../contexts/AuthModalContext";
 import { useVideo } from "../contexts/VideoContext";
-import {
-  DesktopNavSkeleton,
-  HeaderSkeleton,
-  VideoCardSkeleton,
-} from "../skeletonComponents";
+import { getWatchLater, removeFromWatchLater } from "../services";
+import { VideoCardSkeleton } from "../skeletonComponents";
 
 function WatchLater() {
   const [isloading, setIsloading] = useState(true);
@@ -54,17 +52,7 @@ function WatchLater() {
     // eslint-disable-next-line
   }, []);
   useEffect(() => {
-    const getWatchLater = async () => {
-      setIsloading(true);
-      try {
-        const res = await axios.get(`/api/user/watchlater`);
-        setWatchLater(res.data.watchlater);
-      } catch (error) {
-        errorToast("Something went wrong while adding video to history!");
-      }
-      setIsloading(false);
-    };
-    isAuthenticated && getWatchLater();
+    isAuthenticated && getWatchLater(setIsloading, setWatchLater);
   }, [isAuthenticated, token, setWatchLater]);
 
   return (
@@ -79,8 +67,8 @@ function WatchLater() {
       }}
       navbarOffsetBreakpoint="xs"
       fixed
-      navbar={isloading ? <DesktopNavSkeleton /> : <DesktopNav />}
-      header={isloading ? <HeaderSkeleton /> : <HeaderComponent />}
+      navbar={<DesktopNav />}
+      header={<HeaderComponent />}
     >
       {!isAuthenticated ? (
         <Title align="center">You need to login to access this page</Title>
@@ -116,12 +104,15 @@ function WatchLater() {
             grow
           >
             {watchLater.length === 0 ? (
-              <Title align="center">
-                No videos here yet{" "}
-                <Button component={Link} to={"/explore"}>
-                  Explore Videos
-                </Button>
-              </Title>
+              <Container>
+                <NoVideos />
+                <Title align="center">No videos here yet </Title>
+                <Text align="center" my={"lg"}>
+                  <Button component={Link} to={"/explore"}>
+                    Explore Videos
+                  </Button>
+                </Text>
+              </Container>
             ) : (
               watchLater.map(
                 (item: {
@@ -161,6 +152,7 @@ function WatchLater() {
                     style={{
                       maxWidth: matches ? 300 : "100%",
                       minWidth: 250,
+                      position: "relative",
                     }}
                     sm={4}
                     xs={4}
@@ -218,9 +210,25 @@ function WatchLater() {
                             </Text>
                           </div>
                         </div>
-                        <CardMenu />
                       </Group>
                     </Card>
+                    <Menu
+                      trigger="hover"
+                      style={{
+                        position: "absolute",
+                        right: "10%",
+                        bottom: "30%",
+                      }}
+                    >
+                      <Menu.Item
+                        icon={<Clock color={theme.colors.red[6]} size={14} />}
+                        onClick={() =>
+                          removeFromWatchLater(item, setWatchLater)
+                        }
+                      >
+                        Remove to watch later
+                      </Menu.Item>
+                    </Menu>
                   </Grid.Col>
                 )
               )

@@ -20,12 +20,19 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Eye, History, PlaylistAdd, ThumbUp } from "tabler-icons-react";
 import { DesktopNav, Footer, HeaderComponent } from "../components";
-import { errorToast, successToast, warningToast } from "../components/Toast";
+import { errorToast, warningToast } from "../components/Toast";
 import { useAuth } from "../contexts/AuthContext";
 import { useAuthModal } from "../contexts/AuthModalContext";
 import { useVideo } from "../contexts/VideoContext";
-import { createPlaylistHandler } from "../services";
-import { DesktopNavSkeleton, HeaderSkeleton } from "../skeletonComponents";
+import {
+  addToLikedVideos,
+  addToPlaylist,
+  addToWatchLater,
+  createPlaylistHandler,
+  removeFromLikedVideos,
+  removeFromPlaylist,
+  removeFromWatchLater,
+} from "../services";
 import { FooterData } from "../staticData/FooterData";
 
 const useStyles = createStyles((theme) => ({
@@ -64,10 +71,6 @@ const useStyles = createStyles((theme) => ({
     alignItems: "flex-start",
     padding: "1rem",
     position: "relative",
-
-    [theme.fn.smallerThan("sm")]: {
-      height: "80vh",
-    },
   },
 
   title: {
@@ -127,7 +130,7 @@ function SingleVideo() {
   } = useVideo();
   const { _id, avatar, title, creator, description, views, duration } =
     singleVideo;
-  const { token, isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
   const [videoIsLiked, setVideoIsLiked] = useState(false);
   const [videoInWatchLater, setVideoInWatchLater] = useState(false);
   const [playListNameInput, setPlayListNameInput] = useState("");
@@ -150,72 +153,17 @@ function SingleVideo() {
   }, [setSingleVideo, videoId]);
 
   const watchLaterHandler = async (video) => {
-    const deleteFromWatchLater = async (video) => {
-      try {
-        const watchLater = await axios.delete(
-          `/api/user/watchlater/${video._id}`
-        );
-        setWatchLater(watchLater.data.watchlater);
-        successToast("Video deleted from watch later!");
-      } catch (error) {
-        error.response.status === 409
-          ? successToast("Video already exist in watch later!")
-          : errorToast(
-              "Something went wrong while removing video to watch later!"
-            );
-      }
-    };
-    const addToWatchLater = async (video) => {
-      try {
-        const watchLaterVideo = await axios.post(`/api/user/watchlater`, {
-          video,
-        });
-        successToast("Video added to watch later!");
-        setWatchLater(watchLaterVideo.data.watchlater);
-      } catch (error) {
-        error.response.status === 409
-          ? successToast("Video already exist in watch later!")
-          : errorToast(
-              "Something went wrong while adding video to watch later!"
-            );
-      }
-    };
     isAuthenticated
       ? videoInWatchLater
-        ? deleteFromWatchLater(video)
-        : addToWatchLater(video)
+        ? removeFromWatchLater(video, setWatchLater)
+        : addToWatchLater(video, setWatchLater)
       : setAuthModalOpned(true);
   };
   const likeButtonHandler = async (video) => {
-    const addToLikedVideos = async (video) => {
-      try {
-        const likedVideos = await axios.post(`/api/user/likes`, { video });
-        successToast("Video added to liked videos!");
-        setLikedVideos(likedVideos.data.likes);
-      } catch (error) {
-        error.response.status === 409
-          ? successToast("Video already exist in liked videos!")
-          : errorToast(
-              "Something went wrong while adding video to liked videos!"
-            );
-      }
-    };
-
-    const removeFromLikedVideos = async (video) => {
-      try {
-        const likedVideos = await axios.delete(`/api/user/likes/${video._id}`);
-        successToast("Video removed from liked videos!");
-        setLikedVideos(likedVideos.data.likes);
-      } catch (error) {
-        errorToast(
-          "Something went wrong while removing video from liked videos!"
-        );
-      }
-    };
     isAuthenticated
       ? videoIsLiked
-        ? removeFromLikedVideos(video)
-        : addToLikedVideos(video)
+        ? removeFromLikedVideos(video._id, setLikedVideos)
+        : addToLikedVideos(video, setLikedVideos)
       : ifNotAuthenticated();
   };
   const ifNotAuthenticated = () => {
@@ -252,47 +200,6 @@ function SingleVideo() {
 
   useEffect(() => window.scrollTo(0, 0), []);
 
-  const getPlaylists = async () => {
-    try {
-      const res = await axios.get(`/api/user/playlists`);
-      setPlaylist(res.data.playlists);
-    } catch (error) {
-      error.response.status === 500 && errorToast("Something went wrong!");
-    }
-  };
-  const addVideoToPlaylist = async (video, item) => {
-    try {
-      await axios.post(
-        `/api/user/playlists/${item._id}`,
-        {
-          video,
-        },
-        {
-          headers: { authorization: token },
-        }
-      );
-
-      successToast(`Video added to ${item[0].name}`);
-    } catch (error) {
-      error.response.status === 409
-        ? errorToast(`Video already exist in ${item[0].name}`)
-        : errorToast("SOmething went wrong when added video to playlist");
-    }
-    getPlaylists();
-  };
-  const removeVideoFromPlaylist = async (video, item) => {
-    try {
-      await axios.delete(`/api/user/playlists/${item._id}/${video._id}`);
-
-      successToast(`Video removed from ${item[0].name}`);
-    } catch (error) {
-      error.response.status === 409
-        ? errorToast(`Video already exist in ${item[0].name}`)
-        : errorToast("Something went wrong while removing video from playlist");
-    }
-    getPlaylists();
-  };
-
   return (
     <AppShell
       padding={0}
@@ -307,13 +214,13 @@ function SingleVideo() {
       }}
       navbarOffsetBreakpoint="xs"
       fixed
-      navbar={isloading ? <DesktopNavSkeleton /> : <DesktopNav />}
-      header={isloading ? <HeaderSkeleton /> : <HeaderComponent />}
+      navbar={<DesktopNav />}
+      header={<HeaderComponent />}
       footer={<Footer {...FooterData} />}
     >
       {isloading ? (
         <Container className={classes.container}>
-          <Skeleton height={"60vh"} width={"100%"} radius="lg" mb={"md"}/>
+          <Skeleton height={"60vh"} width={"100%"} radius="lg" mb={"md"} />
           <Skeleton height={40} width={"90%"} mt="xl" />
           <div className={classes.actionButtons}>
             <Container
@@ -341,8 +248,7 @@ function SingleVideo() {
               <Skeleton mx={".2rem"} width={120} height={40} />
             </Container>
           </div>
-        <Skeleton width={"100%"} height={50}/>
-
+          <Skeleton width={"100%"} height={50} />
         </Container>
       ) : (
         <Container className={classes.container}>
@@ -359,8 +265,18 @@ function SingleVideo() {
                     my={"sm"}
                     onChange={(e) => {
                       e.target.checked
-                        ? addVideoToPlaylist(singleVideo, item)
-                        : removeVideoFromPlaylist(singleVideo, item);
+                        ? addToPlaylist(
+                            singleVideo,
+                            item,
+                            setPlaylist,
+                            setisloading
+                          )
+                        : removeFromPlaylist(
+                            singleVideo,
+                            item,
+                            setPlaylist,
+                            setisloading
+                          );
                     }}
                     checked={
                       item.videos.filter(

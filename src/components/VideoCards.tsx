@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Badge,
   Card,
   Grid,
   Group,
@@ -79,7 +80,7 @@ function VideoCard() {
               | ReactPortal;
           }) => (
             <Grid.Col
-              style={{ maxWidth: matches ? 300 : "100%", minWidth: 250 }}
+              style={{ maxWidth: matches ? 300 : "100%", minWidth: 250}}
               sm={4}
               xs={4}
               className="video-card"
@@ -95,12 +96,15 @@ function VideoCard() {
                 pb={0}
                 onClick={() => navigate(`/video/${item._id}`)}
               >
-                <Card.Section>
+                <Card.Section style={{position:"relative"}}>
+                  <Badge radius={"xs"} color="dark" variant="filled" style={{position:"absolute", right:"0", zIndex:"10"}}>{item.duration}</Badge>
                   <Image
                     src={item.thumbnail}
                     height={matches ? 160 : 200}
                     alt="Norway"
-                  ></Image>
+                  >
+                    
+                  </Image>
                 </Card.Section>
 
                 <Group

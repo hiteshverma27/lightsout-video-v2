@@ -12,7 +12,7 @@ function VideoCardSkeleton() {
         mt="md"
         grow
       >
-        {"qwertyas".split("").map((i) => (
+        {"qwertyasdfghjklzxcvbnm".split("").map((i) => (
           <Box key={i}>
             <Skeleton height={160} width={280} m="sm" />
             <div style={{ display: "flex" }}>
