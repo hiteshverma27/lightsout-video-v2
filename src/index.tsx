@@ -10,6 +10,9 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import "./index.css";
 import { makeServer } from "./server";
+import ReactGA from 'react-ga';
+ReactGA.initialize('G-QDWS10X3Y5'); // add your tracking id here.
+ReactGA.pageview(window.location.pathname + window.location.search);
 
 // Call make Server
 makeServer();
